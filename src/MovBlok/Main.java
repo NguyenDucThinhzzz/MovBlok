@@ -1,12 +1,12 @@
 package MovBlok;
 
+import MovBlok.Scripts.MovBlokApp;
 import UnifyEngine.Window;
 
 public class Main {
 
 	public static void main(String[] args) {
-		Window app = Window.get(1280, 720, "MovBlok");
+		MovBlokApp app = MovBlokApp.get(1280, 720, "MovBlok");
 		app.run();
 	}
-
 }
