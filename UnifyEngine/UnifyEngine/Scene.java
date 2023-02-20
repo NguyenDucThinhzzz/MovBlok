@@ -2,24 +2,25 @@ package UnifyEngine;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.*;
 import javax.swing.*;
 
 public abstract class Scene extends JPanel{
 	private boolean exit = false;
 
-	protected Scene(JFrame _frame) {
-		initScene(_frame);
-		SceneLoop();
+	protected Scene() {
 	}
 	
-	private void initScene(JFrame _frame) {
+    public void execute() {
+		initScene();
+		sceneLoop();
+    }
+    
+	private void initScene() {
 		setBackground(Color.black);
         setFocusable(true);
-        _frame.add(this);
 	}
 	
-	private void SceneLoop() {
+	private void sceneLoop() {
 		Start();
 		while(!exit) {
 			Update();

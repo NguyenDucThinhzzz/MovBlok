@@ -4,16 +4,18 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.*;
+
+import MovBlok.Scripts.MovBlokApp;
 import UnifyEngine.Scene;
 
 public class MenuScene extends Scene{
-	public MenuScene(JFrame _frame) {
-		super(_frame);
+	public MenuScene() {
+		super();
 	}
 
 	@Override
 	protected void Start() {
-		// TODO Auto-generated method stub
+		setBackground(Color.gray);
 	}
 
 	@Override
@@ -29,13 +31,17 @@ public class MenuScene extends Scene{
 	}
 	
 	//testing
-	int WIDTH = 1, HEIGHT = 10;
+	int WIDTH = 1, HEIGHT = 100;
 	@Override
 	protected void doDrawing(Graphics g) {
-		
-		g.drawOval(50, 50, WIDTH, HEIGHT);
-		WIDTH = WIDTH%10+1;
-		HEIGHT = HEIGHT%10+1;
+		int wd = MovBlokApp.GetWindow().getWidth()/2;
+		int hd = MovBlokApp.GetWindow().getHeight()/2;
+		g.setColor(Color.green);
+		for(int i=-100;i<10000;i++) {
+			g.drawOval(i+wd*0,hd-HEIGHT/2, WIDTH, HEIGHT);
+		}
+		WIDTH = WIDTH%100+1;
+		HEIGHT = HEIGHT%100+1;
 	}
 	
 }

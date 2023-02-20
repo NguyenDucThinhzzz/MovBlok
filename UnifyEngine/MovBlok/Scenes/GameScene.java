@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 public class GameScene extends Scene {
 	public GameScene() {
-		super(new JFrame());
+		super();
 	}
 
 	@Override
