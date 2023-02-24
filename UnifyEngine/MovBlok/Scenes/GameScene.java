@@ -14,7 +14,7 @@ import MovBlok.Scripts.Player;
 public class GameScene extends Scene {
 	
 	private Grid grd;
-	private static Player plr;
+	private Player plr;
 	
 	public GameScene() {
 		super();
@@ -24,7 +24,7 @@ public class GameScene extends Scene {
 
 	@Override
 	protected void Start() {
-		setBackground(Color.gray);
+		
 	}
 
 	@Override
@@ -41,9 +41,7 @@ public class GameScene extends Scene {
 	protected void doDrawing(Graphics g) {
 		int wd = MovBlokApp.GetWindow().getWidth()/2;
 		int hd = MovBlokApp.GetWindow().getHeight()/2;
-		g.setColor(Color.pink);
-		g.drawRect(0,0,80,80);
-
+		grd.drawGrid(g, this, plr.position);
 	}
 	
 }

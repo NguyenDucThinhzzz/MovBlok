@@ -20,6 +20,15 @@ public abstract class Window extends JFrame {
 		this.wd_title = _title;
 	}
 	
+	public void run() {
+		Debug.Log("Game Initialize");
+		init();
+		Debug.Log("Game Loop");
+		gameLoop();
+		Debug.Log("Game Quit");
+		quit();
+	}
+	
 	protected abstract void init();
 	protected abstract void gameLoop();
 	protected abstract void quit();

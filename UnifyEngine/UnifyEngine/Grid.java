@@ -10,6 +10,8 @@ public class Grid {
 	
 	public GameObject[][] arr;
 	public int bound_x=0,bound_y=0;
+	private int hlf_wdt = MovBlokApp.GetWindow().getWidth()/2;
+	private int hlf_hgt = MovBlokApp.GetWindow().getHeight()/2;
 	
 	public int renderDist;
 	public int boxSize;
@@ -34,19 +36,24 @@ public class Grid {
 		this.arr = _arr;
 	}
 	
-	public void drawGrid(Graphics g, JPanel p,Vector2 _renderpos) {
-//		for(int i = _renderpos.y + renderDist; i < _renderpos.y + renderDist; i++) {
-//			for(int j = _renderpos.x + renderDist; j < _renderpos.x + renderDist; j++) {
-//				if(arr[i][j] == null) {
-//					g.setColor(Color.green);
-//					g.drawRect(i*boxSize, j*boxSize, boxSize, boxSize);
-//				}
-//				else {
-//					if(arr[i][j].img!=null)
-//						g.drawImage(arr[i][j].img, i*boxSize, j*boxSize, p);
-//				}
-//			}
-//		}
+	public void drawGrid(Graphics g, JPanel p, Vector2 _renderpos) {
+		int top = _renderpos.y + renderDist;
+		int left = _renderpos.x - renderDist;
+		int bot = _renderpos.y - renderDist;
+		int right = _renderpos.x + renderDist;
+		g.setColor(Color.green);
+		for(int i = bot; i <top ; i++) {
+			for(int j = left; j < right; j++) {
+				if(arr[i][j] == null) {
+					g.drawRect((j-left)*boxSize, (i-bot)*boxSize, boxSize, boxSize);
+					g.drawString("( "+ i +", "+j+")",(j-left)*boxSize+boxSize/4, (i-bot)*boxSize+boxSize/2);
+				}
+				else {
+					if(arr[i][j].img!=null)
+						g.drawImage(arr[i][j].img, (i-bot)*boxSize+boxSize/2, (j-left)*boxSize+boxSize/2, p);
+				}
+			}
+		}
 	}
 	
 	//Grid fuctions

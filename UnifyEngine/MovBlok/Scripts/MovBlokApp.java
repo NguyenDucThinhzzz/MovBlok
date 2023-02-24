@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import MovBlok.Scenes.*;
 import UnifyEngine.Window;
+import UnifyEngine.Debug;
 
 public class MovBlokApp extends Window {
 	//Singleton
@@ -12,7 +13,7 @@ public class MovBlokApp extends Window {
 		return window;
 	}
 	//Game values
-	private GameStates currentState = GameStates.Game;
+	public GameStates currentState = GameStates.Game;
 	//Game scenes
 	private GameScene gamePan;
 	private MenuScene menuPan;
@@ -26,13 +27,6 @@ public class MovBlokApp extends Window {
 			window = new MovBlokApp(_width,_height,_title);
 		}
 		return window;
-	}
-	
-	public static void run() {
-		if(window == null) return;
-		window.init();
-		window.gameLoop();
-		window.quit();
 	}
 	
 	@Override
@@ -49,6 +43,7 @@ public class MovBlokApp extends Window {
 			switch(currentState) {
 				case Menu:
 				{
+					Debug.Log("Menu==========");
 					menuPan = new MenuScene();
 					window.add(menuPan);
 					menuPan.execute();
@@ -57,6 +52,7 @@ public class MovBlokApp extends Window {
 				}
 				case Game:
 				{
+					Debug.Log("Game==========");
 					gamePan = new GameScene();
 					window.add(gamePan);
 					gamePan.execute();
@@ -65,6 +61,7 @@ public class MovBlokApp extends Window {
 				}
 				case Quit:
 				{
+					Debug.Log("Quit==========");
 					wd_exit = true;
 					break;
 				}

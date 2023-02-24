@@ -8,5 +8,6 @@ public class Main {
 	public static void main(String[] args) {
 		MovBlokApp app = MovBlokApp.get(1280, 720, "MovBlok");
 		app.run();
+		
 	}
 }

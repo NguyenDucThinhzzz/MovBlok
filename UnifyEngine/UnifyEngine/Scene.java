@@ -9,11 +9,6 @@ public abstract class Scene extends JPanel{
 
 	protected Scene() {
 	}
-	
-    public void execute() {
-		initScene();
-		sceneLoop();
-    }
     
 	private void initScene() {
 		setBackground(Color.black);
@@ -38,6 +33,12 @@ public abstract class Scene extends JPanel{
 	protected void exitScene() {
 		exit = true;
 	}
+	
+    public void execute() {
+    	Debug.Log("\tScene Execute");
+		initScene();
+		sceneLoop();
+    }
 	
     @Override
     public void paintComponent(Graphics g) {
