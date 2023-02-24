@@ -1,7 +1,6 @@
 package UnifyEngine;
 
 import javax.swing.*;
-
 import java.awt.*;
 
 public abstract class Window extends JFrame {

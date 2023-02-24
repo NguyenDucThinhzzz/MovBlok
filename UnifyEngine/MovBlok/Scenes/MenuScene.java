@@ -36,12 +36,10 @@ public class MenuScene extends Scene{
 	protected void doDrawing(Graphics g) {
 		int wd = MovBlokApp.GetWindow().getWidth()/2;
 		int hd = MovBlokApp.GetWindow().getHeight()/2;
-		g.setColor(Color.green);
-		for(int i=-100;i<10000;i++) {
-			g.drawOval(i+wd*0,hd-HEIGHT/2, WIDTH, HEIGHT);
-		}
-		WIDTH = WIDTH%100+1;
-		HEIGHT = HEIGHT%100+1;
+		g.setColor(Color.pink);
+		g.fillRect(wd-WIDTH/2, hd-HEIGHT/2, WIDTH, HEIGHT);
+		WIDTH = WIDTH%1000+1;
+		HEIGHT = HEIGHT%1000+1;
 	}
 	
 }

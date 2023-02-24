@@ -12,7 +12,7 @@ public class MovBlokApp extends Window {
 		return window;
 	}
 	//Game values
-	private GameStates currentState = GameStates.Menu;
+	private GameStates currentState = GameStates.Game;
 	//Game scenes
 	private GameScene gamePan;
 	private MenuScene menuPan;
@@ -57,7 +57,10 @@ public class MovBlokApp extends Window {
 				}
 				case Game:
 				{
-					
+					gamePan = new GameScene();
+					window.add(gamePan);
+					gamePan.execute();
+					window.remove(gamePan);
 					break;
 				}
 				case Quit:
