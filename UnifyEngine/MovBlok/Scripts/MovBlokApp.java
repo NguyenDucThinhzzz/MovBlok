@@ -23,6 +23,7 @@ public class MovBlokApp extends Window {
 	}
 	
 	public static MovBlokApp get(int _width, int _height, String _title) {
+		Debug.enable = true;
 		if(window==null) {
 			window = new MovBlokApp(_width,_height,_title);
 		}
