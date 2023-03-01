@@ -10,7 +10,7 @@ public abstract class Window extends JFrame {
 		return wd_title;
 	}
 	
-	protected ImageIcon engine_icon = new ImageIcon("MovblokGame/UnifyEngine/resources/UNiFY-Engine.png");
+	protected Image engine_icon = (new ImageIcon("UnifyEngine/resources/UNiFY-Engine.png")).getImage();
 	
 	protected boolean wd_exit = false;
 	

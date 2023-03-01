@@ -1,11 +1,12 @@
 package UnifyEngine;
 
+import java.awt.Component;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 
-public class GameObject {
+public class GameObject{
 	public Vector2 position;
-	public Image img = (new ImageIcon("UnifyEngine/UnifyEngine/resources/default_err.png")).getImage();
+	public Image img = (new ImageIcon("UnifyEngine/resources/default_err.png")).getImage();
 	
 	public GameObject() {
 	}

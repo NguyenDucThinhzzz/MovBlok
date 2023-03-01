@@ -33,7 +33,7 @@ public class MovBlokApp extends Window {
 	@Override
 	protected void init() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setIconImage(engine_icon.getImage());
+		setIconImage(engine_icon);
 		setLayout(new GridLayout(1,4));
 		setVisible(true);
 	}

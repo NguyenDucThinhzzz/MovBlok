@@ -12,11 +12,14 @@ public abstract class Scene extends JPanel{
     
 	private void initScene() {
 		setBackground(Color.black);
-        setFocusable(true);
+		setFocusable(false);
+		setVisible(true);
 	}
 	
 	private void sceneLoop() {
+		revalidate();
 		Start();
+		repaint();
 		while(!exit) {
 			Update();
 			LateUpdate();

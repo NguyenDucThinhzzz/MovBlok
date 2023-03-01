@@ -12,6 +12,10 @@ public class Vector2 {
 		this.x = _x;
 		this.y = _y;
 	}
+	public Vector2(Vector2 _cpy) {
+		this.x = _cpy.x;
+		this.y = _cpy.y;
+	}
 	
 	@Override
 	public String toString() {
