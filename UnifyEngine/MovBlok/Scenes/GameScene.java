@@ -22,8 +22,8 @@ public class GameScene extends Scene {
 	
 	public GameScene() {
 		super();
-		grd = new Grid(100,100, (new ImageIcon("MovBlok/resources/Stone_Tile.png")).getImage());
-		plr = new Player(25,25);
+		grd = new Grid(20, 10, (new ImageIcon("UnifyEngine/resources/None_Tile.png")).getImage());
+		plr = new Player(5,5);
 		grd.arr[plr.position.y][plr.position.x] = plr;
 	}
 
@@ -58,7 +58,37 @@ public class GameScene extends Scene {
 
 	        if (key == KeyEvent.VK_ESCAPE) {
 	        	Debug.Log("\t\tPause Menu");
+	        	return;
+	        }
+	        
+	        if (key == KeyEvent.VK_A && plr.position.x>0) {
+	        	Debug.Log("L");
+	        	grd.switchObj(new Vector2(plr.position.x-1,plr.position.y), plr.position);
+	        	plr.position.x--;
+	        	return;
+	        }
+
+	        if (key == KeyEvent.VK_D && plr.position.x<grd.GetGridBoundX()-1) {
+	        	Debug.Log("R");
+	        	grd.switchObj(new Vector2(plr.position.x+1,plr.position.y), plr.position);
+	        	plr.position.x++;
+	        	return;
+	        }
+
+	        if (key == KeyEvent.VK_W && plr.position.y>0) {
+	        	Debug.Log("U");
+	        	grd.switchObj(new Vector2(plr.position.x,plr.position.y-1), plr.position);
+	        	plr.position.y--;
+	        	return;
+	        }
+
+	        if (key == KeyEvent.VK_S && plr.position.y<grd.GetGridBoundY()-1) {
+	        	Debug.Log("D");
+	        	grd.switchObj(new Vector2(plr.position.x,plr.position.y+1), plr.position);
+	        	plr.position.y++;
+	        	return;
 	        }
 	    }
 	}
+	
 }

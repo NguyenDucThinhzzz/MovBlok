@@ -6,35 +6,24 @@ import javax.swing.*;
 
 public abstract class Scene extends JPanel{
 	private boolean exit = false;
+	private boolean isDirty;
 
 	protected Scene() {
 	}
     
-	private void initScene() {
-		setBackground(Color.black);
-		setFocusable(false);
-		setVisible(true);
-	}
-	
-	private void sceneLoop() {
-		revalidate();
-		Start();
-		repaint();
-		while(!exit) {
-			Update();
-			LateUpdate();
-			repaint();
-		}
-	}
-	
 	protected abstract void Start();
 	
 	protected abstract void Update();
 	
 	protected abstract void LateUpdate();
 	
-	protected void exitScene() {
-		exit = true;
+	protected abstract void doDrawing(Graphics g);
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
+		doDrawing(g);
 	}
 	
     public void execute() {
@@ -42,13 +31,27 @@ public abstract class Scene extends JPanel{
 		initScene();
 		sceneLoop();
     }
-	
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        doDrawing(g);
+    
+    protected void exitScene() {
+    	exit = true;
     }
     
-    protected abstract void doDrawing(Graphics g);
+    private void initScene() {
+    	setBackground(Color.black);
+    	setFocusable(false);
+    	setVisible(true);
+    }
+    
+    private void sceneLoop() {
+    	revalidate();
+    	Start();
+    	repaint();
+    	while(!exit) {
+    		Update();
+    		LateUpdate();
+    		repaint();
+    	}
+    }
+	
+    
 }
