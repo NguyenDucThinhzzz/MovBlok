@@ -10,7 +10,7 @@ import MovBlok.Scripts.MovBlokApp;
 
 public class Grid {
 	
-	public GameObject[][] arr;
+	private GameObject[][] arr;
 	public int renderDist;
 	public int boxSize;
 	public Image defaultTile;
@@ -63,9 +63,6 @@ public class Grid {
 						g.drawImage(arr[i][j].img, (j-left-renderDist)*boxSize+hlf_wdt-boxSize/2, (i-bot-renderDist)*boxSize+hlf_hgt-boxSize/2, boxSize, boxSize, p);
 					}
 				}
-				else {
-					g.drawImage(defaultTile , (j-left-renderDist)*boxSize+hlf_wdt-boxSize/2, (i-bot-renderDist)*boxSize+hlf_hgt-boxSize/2, boxSize, boxSize, p);
-				}
 				if(Debug.enable) {
 					g.drawRect((j-left-renderDist)*boxSize+hlf_wdt-boxSize/2, (i-bot-renderDist)*boxSize+hlf_hgt-boxSize/2, boxSize, boxSize);
 					g.drawString("( "+ i +", "+j+")",(j-left-renderDist)*boxSize+boxSize/4+hlf_wdt-boxSize/2, (i-bot-renderDist)*boxSize+boxSize/2+hlf_hgt-boxSize/2);
@@ -82,10 +79,27 @@ public class Grid {
 	public void addObj(GameObject _obj, Vector2 _pos) {
 		 arr[_pos.y][_pos.x] = _obj;
 	}
+	public void addObj(GameObject _obj, int _x, int _y) {
+		 arr[_y][_x] = _obj;
+	}
 	
 	public void switchObj(Vector2 _pos1,Vector2 _pos2) {
 		GameObject _temp = arr[_pos1.y][_pos1.x];
 		arr[_pos1.y][_pos1.x] = arr[_pos2.y][_pos2.x];
 		arr[_pos2.y][_pos2.x] = _temp;
+	}
+	
+	public GameObject getObj(Vector2 _pos) {
+		return arr[_pos.y][_pos.x];
+	}
+	public GameObject getObj(int _x, int _y) {
+		return arr[_y][_x];
+	}
+	
+	public ObjectType checkObjType(Vector2 _pos) {
+		return arr[_pos.y][_pos.x].obj_type;
+	}
+	public ObjectType checkObjType(int _x, int _y) {
+		return arr[_y][_x].obj_type;
 	}
 }

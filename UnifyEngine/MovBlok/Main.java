@@ -6,7 +6,7 @@ import UnifyEngine.Window;
 public class Main {
 
 	public static void main(String[] args) {
-		MovBlokApp app = MovBlokApp.get(600, 600, "MovBlok");
+		MovBlokApp app = MovBlokApp.get(1280, 720, "MovBlok");
 		app.run();
 	}
 }
