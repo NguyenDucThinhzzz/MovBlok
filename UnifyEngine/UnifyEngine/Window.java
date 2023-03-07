@@ -23,10 +23,14 @@ public abstract class Window extends JFrame implements Runnable{
 	public void run() {
 		Debug.Log("Game Initialize");
 		init();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
 		Debug.Log("Game Loop");
 		gameLoop();
 		Debug.Log("Game Quit");
 		quit();
+		setVisible(false);
+		dispose();
 	}
 	
 	protected abstract void init();

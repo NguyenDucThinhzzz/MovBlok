@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import UnifyEngine.Scene;
 import UnifyEngine.Debug;
+import UnifyEngine.GameObject;
 import UnifyEngine.Grid;
 import UnifyEngine.Vector2;
 import MovBlok.Objects.*;
@@ -22,7 +23,7 @@ public class GameScene extends Scene {
 	
 	public GameScene() {
 		super();
-		grd = new Grid(20, 10, (new ImageIcon("MovBlok/resources/test_box.png")).getImage());
+		grd = new Grid(20, 50, (new ImageIcon("MovBlok/resources/test_box.png")).getImage());
 		plr = new Player(5,5);
 		grd.addObj(plr, plr.position);
 	}
@@ -39,6 +40,8 @@ public class GameScene extends Scene {
 		}
 		//Testing
 		grd.addObj(new Box(5,6),5,6);
+		grd.addObj(new Box(6,6),6,6);
+		grd.addObj(new Box(8,6),8,6);
 		grd.addObj(new Wall(7,5),7,5);
 	}
 
@@ -73,104 +76,105 @@ public class GameScene extends Scene {
 	        
 	        if (key == KeyEvent.VK_A && plr.position.x>0) {
 	        	Debug.Log("L");
-	        	switch(grd.checkObjType(plr.position.x-1,plr.position.y)) {
-					case box:
-					{
-						break;					
-					}
-					case ground:
-					{
+	        	GameObject temp = grd.getObj(plr.position.x-1,plr.position.y);
+	        	if( temp == null) return;
+				if( temp instanceof Wall) {
+					return;
+				}
+				if( temp instanceof Ground) {
+					grd.switchObj(new Vector2(plr.position.x-1,plr.position.y), plr.position);
+					plr.position.x--;
+					return;
+				}
+
+				if( temp instanceof Box) {
+					GameObject nextObj = grd.getObj(plr.position.x-2,plr.position.y);
+					if(nextObj==null) return;
+					if(nextObj instanceof Ground) {
+						grd.switchObj(new Vector2(plr.position.x-2,plr.position.y), new Vector2(plr.position.x-1,plr.position.y));
 						grd.switchObj(new Vector2(plr.position.x-1,plr.position.y), plr.position);
 						plr.position.x--;
-						break;
-					}	
-					case none:
-					{
-						break;
 					}
-					case wall:
-					{
-						break;
-					}
-	        	}
+					return;
+				}
 	        	return;
 	        }
 
 	        if (key == KeyEvent.VK_D && plr.position.x<grd.GetGridBoundX()-1) {
 	        	Debug.Log("R");
-	        	switch(grd.checkObjType(plr.position.x+1,plr.position.y)) {
-					case box:
-					{
-						
-						break;					
-					}
-					case ground:
-					{
+	        	GameObject temp = grd.getObj(plr.position.x+1,plr.position.y);
+	        	if( temp == null) return;
+				if( temp instanceof Wall) {
+					return;
+				}
+				if( temp instanceof Ground) {
+					grd.switchObj(new Vector2(plr.position.x+1,plr.position.y), plr.position);
+					plr.position.x++;
+					return;
+				}
+
+				if( temp instanceof Box) {
+					GameObject nextObj = grd.getObj(plr.position.x+2,plr.position.y);
+					if(nextObj==null) return;
+					if(nextObj instanceof Ground) {
+						grd.switchObj(new Vector2(plr.position.x+2,plr.position.y), new Vector2(plr.position.x+1,plr.position.y));
 						grd.switchObj(new Vector2(plr.position.x+1,plr.position.y), plr.position);
 						plr.position.x++;
-						break;
-					}	
-					case none:
-					{
-						break;
 					}
-					case wall:
-					{
-						break;
-					}
-	        	}
+					return;
+				}
 	        	return;
 	        }
 
 	        if (key == KeyEvent.VK_W && plr.position.y>0) {
 	        	Debug.Log("U");
-	        	switch(grd.checkObjType(plr.position.x,plr.position.y-1)) {
-					case box:
-					{
-						
-						break;					
-					}
-					case ground:
-					{
+	        	GameObject temp = grd.getObj(plr.position.x,plr.position.y-1);
+	        	if( temp == null) return;
+				if( temp instanceof Wall) {
+					return;
+				}
+				if( temp instanceof Ground) {
+					grd.switchObj(new Vector2(plr.position.x,plr.position.y-1), plr.position);
+					plr.position.y--;
+					return;
+				}
+
+				if( temp instanceof Box) {
+					GameObject nextObj = grd.getObj(plr.position.x,plr.position.y-2);
+					if(nextObj==null) return;
+					if(nextObj instanceof Ground) {
+						grd.switchObj(new Vector2(plr.position.x,plr.position.y-2), new Vector2(plr.position.x,plr.position.y-1));
 						grd.switchObj(new Vector2(plr.position.x,plr.position.y-1), plr.position);
 						plr.position.y--;
-						break;
-					}	
-					case none:
-					{
-						break;
 					}
-					case wall:
-					{
-						break;
-					}
-	        	}		
-	        	return;
+					return;
+				}
+				return;
 	        }
 
 	        if (key == KeyEvent.VK_S && plr.position.y<grd.GetGridBoundY()-1) {
 	        	Debug.Log("D");
-	        	switch(grd.checkObjType(plr.position.x,plr.position.y+1)) {
-					case box:
-					{	
-						
-						break;					
-					}
-					case ground:
-					{
+	        	GameObject temp = grd.getObj(plr.position.x,plr.position.y+1);
+	        	if( temp == null) return;
+				if( temp instanceof Wall) {
+					return;
+				}
+				if( temp instanceof Ground) {
+					grd.switchObj(new Vector2(plr.position.x,plr.position.y+1), plr.position);
+					plr.position.y++;
+					return;
+				}
+
+				if( temp instanceof Box) {
+					GameObject nextObj = grd.getObj(plr.position.x,plr.position.y+2);
+					if(nextObj==null) return;
+					if(nextObj instanceof Ground) {
+						grd.switchObj(new Vector2(plr.position.x,plr.position.y+2), new Vector2(plr.position.x,plr.position.y+1));
 						grd.switchObj(new Vector2(plr.position.x,plr.position.y+1), plr.position);
 						plr.position.y++;
-						break;
-					}	
-					case none:
-					{
-						break;
 					}
-					case wall:
-					{
-						break;
-					}
-	        	}	
+					return;
+				}
 	        	return;
 	        }
 	    }

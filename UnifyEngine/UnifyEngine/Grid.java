@@ -77,29 +77,27 @@ public class Grid {
 	
 	//Grid fuctions
 	public void addObj(GameObject _obj, Vector2 _pos) {
+		if(_pos.x<0 || _pos.y<0 || _pos.x>=bound_x || _pos.y>=bound_y) return;
 		 arr[_pos.y][_pos.x] = _obj;
 	}
 	public void addObj(GameObject _obj, int _x, int _y) {
+		if(_x<0 || _y<0 || _x>=bound_x || _y>=bound_y) return;
 		 arr[_y][_x] = _obj;
 	}
 	
 	public void switchObj(Vector2 _pos1,Vector2 _pos2) {
+		if(_pos1.x<0 || _pos1.y<0 || _pos1.x>=bound_x || _pos1.y>=bound_y || _pos2.x<0 || _pos2.y<0 || _pos2.x>=bound_x || _pos2.y>=bound_y) return;
 		GameObject _temp = arr[_pos1.y][_pos1.x];
 		arr[_pos1.y][_pos1.x] = arr[_pos2.y][_pos2.x];
 		arr[_pos2.y][_pos2.x] = _temp;
 	}
 	
-	public GameObject getObj(Vector2 _pos) {
+	public GameObject getObj(Vector2 _pos) { 
+		if(_pos.x<0 || _pos.y<0 || _pos.x>=bound_x || _pos.y>=bound_y) return null;
 		return arr[_pos.y][_pos.x];
 	}
 	public GameObject getObj(int _x, int _y) {
+		if(_x<0 || _y<0 || _x>=bound_x || _y>=bound_y) return null;
 		return arr[_y][_x];
-	}
-	
-	public ObjectType checkObjType(Vector2 _pos) {
-		return arr[_pos.y][_pos.x].obj_type;
-	}
-	public ObjectType checkObjType(int _x, int _y) {
-		return arr[_y][_x].obj_type;
 	}
 }

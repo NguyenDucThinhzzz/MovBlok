@@ -13,7 +13,7 @@ public class MovBlokApp extends Window {
 		return window;
 	}
 	//Game values
-	public GameStates currentState = GameStates.Game;
+	public GameStates currentState = GameStates.Menu;
 	//Game scenes
 	private GameScene gamePan;
 	private MenuScene menuPan;
@@ -32,10 +32,8 @@ public class MovBlokApp extends Window {
 	
 	@Override
 	protected void init() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(engine_icon);
 		setLayout(new GridLayout(1,4));
-		setVisible(true);
 	}
 	
 	@Override
@@ -72,7 +70,6 @@ public class MovBlokApp extends Window {
 
 	@Override
 	protected void quit() {
-		// TODO Auto-generated method stub
 		
 	}
 }
