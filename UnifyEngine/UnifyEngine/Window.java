@@ -3,7 +3,7 @@ package UnifyEngine;
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class Window extends JFrame implements Runnable{
+public abstract class Window extends JFrame{
 	//Window values
 	protected String wd_title;
 	public String GetTitle() {

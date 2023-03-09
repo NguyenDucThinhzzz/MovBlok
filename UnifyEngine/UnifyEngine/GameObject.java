@@ -20,5 +20,5 @@ public abstract class GameObject{
 		this.img = (new ImageIcon(_dir)).getImage(); 
 	}
 	
-	public abstract void ObjFunc();
+	public abstract void update();
 }

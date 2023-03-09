@@ -14,6 +14,7 @@ import UnifyEngine.Grid;
 import UnifyEngine.Vector2;
 import MovBlok.Objects.*;
 import MovBlok.Objects.Box;
+import MovBlok.Scripts.GameStates;
 import MovBlok.Scripts.MovBlokApp;
 
 public class GameScene extends Scene {
@@ -31,6 +32,7 @@ public class GameScene extends Scene {
 	@Override
 	protected void Start() {
 		MovBlokApp.GetWindow().addKeyListener(new ControlAdapter());
+		this.revalidate();
 		for(int i=0;i<grd.GetGridBoundY();i++) {
 			for(int j=0;j<grd.GetGridBoundX();j++) {
 				if(grd.getObj(j,i)==null){
@@ -47,7 +49,7 @@ public class GameScene extends Scene {
 
 	@Override
 	protected void Update() {
-		
+		plr.update();
 	}
 
 	@Override
@@ -71,10 +73,14 @@ public class GameScene extends Scene {
 
 	        if (key == KeyEvent.VK_ESCAPE) {
 	        	Debug.Log("\t\tPause Menu");
+	        	
+	        	MovBlokApp.GetWindow().SetCurrentState(GameStates.Quit);
+	        	exitScene();
+	        	
 	        	return;
 	        }
 	        
-	        if (key == KeyEvent.VK_A && plr.position.x>0) {
+	        if ((key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT) && plr.position.x>0) {
 	        	Debug.Log("L");
 	        	GameObject temp = grd.getObj(plr.position.x-1,plr.position.y);
 	        	if( temp == null) return;
@@ -100,7 +106,7 @@ public class GameScene extends Scene {
 	        	return;
 	        }
 
-	        if (key == KeyEvent.VK_D && plr.position.x<grd.GetGridBoundX()-1) {
+	        if ((key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) && plr.position.x<grd.GetGridBoundX()-1) {
 	        	Debug.Log("R");
 	        	GameObject temp = grd.getObj(plr.position.x+1,plr.position.y);
 	        	if( temp == null) return;
@@ -126,7 +132,7 @@ public class GameScene extends Scene {
 	        	return;
 	        }
 
-	        if (key == KeyEvent.VK_W && plr.position.y>0) {
+	        if ((key == KeyEvent.VK_W || key == KeyEvent.VK_UP)&& plr.position.y>0) {
 	        	Debug.Log("U");
 	        	GameObject temp = grd.getObj(plr.position.x,plr.position.y-1);
 	        	if( temp == null) return;
@@ -152,7 +158,7 @@ public class GameScene extends Scene {
 				return;
 	        }
 
-	        if (key == KeyEvent.VK_S && plr.position.y<grd.GetGridBoundY()-1) {
+	        if ((key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN) && plr.position.y<grd.GetGridBoundY()-1) {
 	        	Debug.Log("D");
 	        	GameObject temp = grd.getObj(plr.position.x,plr.position.y+1);
 	        	if( temp == null) return;

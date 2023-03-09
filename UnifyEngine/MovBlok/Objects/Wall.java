@@ -8,7 +8,7 @@ public class Wall extends GameObject{
 	}
 
 	@Override
-	public void ObjFunc() {
+	public void update() {
 		// TODO Auto-generated method stub
 		
 	}

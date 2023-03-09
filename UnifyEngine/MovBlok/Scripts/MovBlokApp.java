@@ -13,7 +13,10 @@ public class MovBlokApp extends Window {
 		return window;
 	}
 	//Game values
-	public GameStates currentState = GameStates.Menu;
+	private GameStates currentState = GameStates.Menu;
+	public void SetCurrentState(GameStates _state) {
+		currentState = _state;
+	}
 	//Game scenes
 	private GameScene gamePan;
 	private MenuScene menuPan;
@@ -23,7 +26,7 @@ public class MovBlokApp extends Window {
 	}
 	
 	public static MovBlokApp get(int _width, int _height, String _title) {
-		Debug.enable = false;
+		Debug.enable = true;
 		if(window==null) {
 			window = new MovBlokApp(_width,_height,_title);
 		}
@@ -33,7 +36,7 @@ public class MovBlokApp extends Window {
 	@Override
 	protected void init() {
 		setIconImage(engine_icon);
-		setLayout(new GridLayout(1,4));
+		setLayout(new GridLayout(1,1));
 	}
 	
 	@Override
@@ -47,6 +50,7 @@ public class MovBlokApp extends Window {
 					window.add(menuPan);
 					menuPan.execute();
 					window.remove(menuPan);
+					menuPan=null;
 					break;
 				}
 				case Game:
@@ -56,6 +60,7 @@ public class MovBlokApp extends Window {
 					window.add(gamePan);
 					gamePan.execute();
 					window.remove(gamePan);
+					gamePan=null;
 					break;
 				}
 				case Quit:

@@ -1,12 +1,17 @@
 package UnifyEngine;
 
 import java.awt.Color;
+import java.awt.Frame;
 import java.awt.Graphics;
 import javax.swing.*;
 
+import MovBlok.Scripts.MovBlokApp;
+
 public abstract class Scene extends JPanel{
+	protected int width = MovBlokApp.GetWindow().getWidth()/2;
+	protected int height = MovBlokApp.GetWindow().getHeight()/2;
+	
 	private boolean exit = false;
-	private boolean isDirty;
 
 	protected Scene() {
 	}

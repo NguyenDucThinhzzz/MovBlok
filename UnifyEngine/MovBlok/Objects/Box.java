@@ -8,7 +8,7 @@ public class Box extends GameObject {
 	}
 
 	@Override
-	public void ObjFunc() {
+	public void update() {
 		// TODO Auto-generated method stub
 		
 	}
