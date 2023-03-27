@@ -1,33 +1,26 @@
 package MovBlok.Objects;
 
-import UnifyEngine.GameObject;
+import java.awt.Image;
+import java.util.LinkedList;
+import java.util.Queue;
 
-public class Player extends GameObject implements Runnable{
-	
-	Thread thread=null;
+import javax.swing.ImageIcon;
+
+import UnifyEngine.Debug;
+import UnifyEngine.GameObject;
+import UnifyEngine.Vector2;
+
+public class Player extends GameObject{
 	
 	public Player(int _x, int _y) {
-		super(_x,_y,"MovBlok/resources/player_low_res.png");
-		thread = new Thread(this);
-		thread.start();
+		super(_x,_y,"MovBlok/resources/player_low_res.png",0);
+	}
+	public Player(Vector2 _vec) {
+		super(_vec.x,_vec.y,"MovBlok/resources/player_low_res.png",0);
 	}
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-		
 	}
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-		try {
-			Thread.sleep(1000);
-		} 
-		catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-		}
-	}
-	
 }

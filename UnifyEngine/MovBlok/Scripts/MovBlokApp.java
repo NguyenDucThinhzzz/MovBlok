@@ -13,8 +13,8 @@ public class MovBlokApp extends Window {
 		return window;
 	}
 	//Game values
-	private GameStates currentState = GameStates.Menu;
-	public void SetCurrentState(GameStates _state) {
+	private ApplicationStates currentState = ApplicationStates.Game;
+	public void SetCurrentState(ApplicationStates _state) {
 		currentState = _state;
 	}
 	//Game scenes

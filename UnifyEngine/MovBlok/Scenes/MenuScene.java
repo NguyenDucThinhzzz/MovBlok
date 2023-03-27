@@ -7,11 +7,13 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import MovBlok.Scripts.GameStates;
+import MovBlok.Scripts.ApplicationStates;
 import MovBlok.Scripts.MovBlokApp;
 import UnifyEngine.Scene;
 
 public class MenuScene extends Scene{
+	protected int width = MovBlokApp.GetWindow().getWidth()/2;
+	protected int height = MovBlokApp.GetWindow().getHeight()/2;
 	private JButton startBut = null;
 	private int buttonWidth = 100;
 	private int buttonHeight = 40;
@@ -30,7 +32,7 @@ public class MenuScene extends Scene{
 		this.add(startBut);
 		startBut.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                MovBlokApp.GetWindow().SetCurrentState(GameStates.Game);
+                MovBlokApp.GetWindow().SetCurrentState(ApplicationStates.Game);
                 exitScene();
             }
         });

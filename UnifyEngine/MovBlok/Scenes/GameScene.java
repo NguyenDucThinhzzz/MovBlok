@@ -1,32 +1,38 @@
 package MovBlok.Scenes;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
 
 import UnifyEngine.Scene;
 import UnifyEngine.Debug;
 import UnifyEngine.GameObject;
-import UnifyEngine.Grid;
 import UnifyEngine.Vector2;
 import MovBlok.Objects.*;
 import MovBlok.Objects.Box;
+import MovBlok.Scripts.ApplicationStates;
 import MovBlok.Scripts.GameStates;
+import MovBlok.Scripts.Grid;
 import MovBlok.Scripts.MovBlokApp;
+import MovBlok.Scripts.SaveManager.DataHandler;
 
 public class GameScene extends Scene {
-	
+	public static Player plr;
+	protected int width = MovBlokApp.GetWindow().getWidth()/2;
+	protected int height = MovBlokApp.GetWindow().getHeight()/2;
 	private Grid grd;
-	private Player plr;
+	private GameStates curGameState = GameStates.InGame;
 	
 	public GameScene() {
 		super();
-		grd = new Grid(20, 50, (new ImageIcon("MovBlok/resources/test_box.png")).getImage());
-		plr = new Player(5,5);
-		grd.addObj(plr, plr.position);
+		grd = new Grid(8, 8, width, height, (new ImageIcon("MovBlok/resources/test_box.png")).getImage());
+		plr = new Player(grd.ReadFileData("Movblok/MapData/Input"));
+		grd.addObj(plr);
 	}
 
 	@Override
@@ -36,20 +42,31 @@ public class GameScene extends Scene {
 		for(int i=0;i<grd.GetGridBoundY();i++) {
 			for(int j=0;j<grd.GetGridBoundX();j++) {
 				if(grd.getObj(j,i)==null){
-					grd.addObj(new Ground(j,i),j,i);
+					grd.addObj(new Ground(j,i));
 				}
 			}
 		}
-		//Testing
-		grd.addObj(new Box(5,6),5,6);
-		grd.addObj(new Box(6,6),6,6);
-		grd.addObj(new Box(8,6),8,6);
-		grd.addObj(new Wall(7,5),7,5);
+//		//Testing
+//		grd.addObj(new Box(3,1));
+//		for(int i=0;i<grd.GetGridBoundX();i++) {
+//			grd.addObj(new Wall(i,0));
+//			grd.addObj(new Wall(i,grd.GetGridBoundY()-1));
+//		}
+//		for(int i=0;i<grd.GetGridBoundY();i++) {
+//			grd.addObj(new Wall(0,i));
+//			grd.addObj(new Wall(grd.GetGridBoundX()-1,i));
+//		}
+//		for(int i=1;i<7;i++) {
+//			if(i==5) continue;
+//			grd.addObj(new Wall(i,2));
+//		}
+//		grd.addObj(new Portal(6,6));
+		grd.WriteFileData("MovBlok/MapData/Test");
 	}
-
+	
 	@Override
 	protected void Update() {
-		plr.update();
+		
 	}
 
 	@Override
@@ -60,8 +77,22 @@ public class GameScene extends Scene {
 	@Override
 	protected void doDrawing(Graphics g) {
 		g.drawImage((new ImageIcon("UnifyEngine/resources/UNiFY-Engine.png")).getImage(),0,0,this);
-		grd.drawGrid(g, this, plr.position);
+		switch(curGameState) {
+		case InGame:
+			grd.drawGrid(g, this, plr.position);
+			break;
+		case WinGame:
+			g.setColor(Color.green);
+			g.drawString("YOU WIN!!!", width, height);
+			break;
+		case PauseGame:
+			break;
+		}
 
+	}
+	
+	private void win() {
+		curGameState = GameStates.WinGame;
 	}
 	
 	public class ControlAdapter extends KeyAdapter {
@@ -74,11 +105,13 @@ public class GameScene extends Scene {
 	        if (key == KeyEvent.VK_ESCAPE) {
 	        	Debug.Log("\t\tPause Menu");
 	        	
-	        	MovBlokApp.GetWindow().SetCurrentState(GameStates.Quit);
+	        	MovBlokApp.GetWindow().SetCurrentState(ApplicationStates.Quit);
 	        	exitScene();
 	        	
 	        	return;
 	        }
+	        
+	        if(curGameState!=GameStates.InGame) return; 
 	        
 	        if ((key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT) && plr.position.x>0) {
 	        	Debug.Log("L");
@@ -101,6 +134,10 @@ public class GameScene extends Scene {
 						grd.switchObj(new Vector2(plr.position.x-1,plr.position.y), plr.position);
 						plr.position.x--;
 					}
+					return;
+				}
+				if( temp instanceof Portal) {
+					win();
 					return;
 				}
 	        	return;
@@ -129,6 +166,10 @@ public class GameScene extends Scene {
 					}
 					return;
 				}
+				if( temp instanceof Portal) {
+					win();
+					return;
+				}
 	        	return;
 	        }
 
@@ -155,6 +196,10 @@ public class GameScene extends Scene {
 					}
 					return;
 				}
+				if( temp instanceof Portal) {
+					win();
+					return;
+				}
 				return;
 	        }
 
@@ -179,6 +224,10 @@ public class GameScene extends Scene {
 						grd.switchObj(new Vector2(plr.position.x,plr.position.y+1), plr.position);
 						plr.position.y++;
 					}
+					return;
+				}
+				if( temp instanceof Portal) {
+					win();
 					return;
 				}
 	        	return;

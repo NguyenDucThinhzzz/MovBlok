@@ -1,22 +1,34 @@
-package UnifyEngine;
+package MovBlok.Scripts;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-import MovBlok.Scripts.MovBlokApp;
+import MovBlok.Objects.Box;
+import MovBlok.Objects.Ground;
+import MovBlok.Objects.Portal;
+import MovBlok.Objects.Wall;
+import MovBlok.Scripts.SaveManager.DataHandler;
+import UnifyEngine.Debug;
+import UnifyEngine.GameObject;
+import UnifyEngine.Vector2;
 
 public class Grid {
 	
 	private GameObject[][] arr;
 	public int renderDist;
+	private int hlf_wdt;
+	private int hlf_hgt;
 	public int boxSize;
 	public Image defaultTile;
 	
-	private int hlf_wdt = MovBlokApp.GetWindow().getWidth()/2;
-	private int hlf_hgt = MovBlokApp.GetWindow().getHeight()/2;
 	
 	private int bound_x=0;
 	public int GetGridBoundX() {
@@ -27,9 +39,11 @@ public class Grid {
 		return bound_y;
 	}
 	
-	public Grid(int _x,int _y, Image _defaultTile) {
+	public Grid(int _x,int _y, int _width, int _height, Image _defaultTile) {
 		this.bound_x = _x;
 		this.bound_y = _y;
+		this.hlf_wdt = _width;
+		this.hlf_hgt = _height;
 		this.defaultTile = _defaultTile;
 		arr = new GameObject[_y][_x];
 		for(GameObject[] i: arr) {
@@ -75,14 +89,76 @@ public class Grid {
 		}
 	}
 	
-	//Grid fuctions
-	public void addObj(GameObject _obj, Vector2 _pos) {
-		if(_pos.x<0 || _pos.y<0 || _pos.x>=bound_x || _pos.y>=bound_y) return;
-		 arr[_pos.y][_pos.x] = _obj;
+	//DataHandling
+	public Vector2 ReadFileData(String _filePath){
+		try {
+			Vector2 plrPos = new Vector2();
+			int x,y;
+			Scanner scn = new Scanner(new File(_filePath));
+			//Get x,y of the playing field
+			x = scn.nextInt();
+			y = scn.nextInt();
+			arr = new GameObject[y][x];
+			//Read the file data
+			for(int i=0;i<y;i++) {
+				for(int j=0;j<x;j++) {
+					switch(scn.nextInt()) {
+					case 0:
+						plrPos = new Vector2(i,j);
+						break;
+					case 1:
+						addObj(new Box(j,i));
+						break;
+					case 2:
+						addObj(new Ground(j,i));;
+						break;
+					case 3:
+						addObj(new Wall(j,i));;
+						break;
+					case 4:
+						addObj(new Portal(j,i));;
+						break;
+					}
+				}
+			}
+			scn.close();
+			return plrPos;
+		} 
+		catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			Debug.Log("The file you are trying to read is NULL!");
+			return null;
+		}	
 	}
-	public void addObj(GameObject _obj, int _x, int _y) {
-		if(_x<0 || _y<0 || _x>=bound_x || _y>=bound_y) return;
-		 arr[_y][_x] = _obj;
+	
+	public void WriteFileData(String _filePath) {
+		
+		try {
+			PrintWriter prt = new PrintWriter(new File(_filePath));
+			int x = GetGridBoundX();
+			int y = GetGridBoundY();
+			prt.println(x+" "+y);
+			for(int i=0;i<y;i++) {
+				for(int j=0;j<x;j++) {
+					prt.print(getObj(j, i).GetID()+" ");
+				}
+				prt.println();
+			}
+			prt.close();
+		}
+		catch (FileNotFoundException e) {
+			Debug.Log("The file you are trying to read is NULL!");
+		}
+		catch (ArrayIndexOutOfBoundsException e) {
+			Debug.Log("The pointer you are trying to access is NULL!");
+		}
+	}
+	
+	//GridFuctions
+	public void addObj(GameObject _obj) {
+		if(_obj == null) return;
+		if(_obj.position.x<0 || _obj.position.y<0 || _obj.position.x>=bound_x || _obj.position.y>=bound_y) return;
+		 arr[_obj.position.y][_obj.position.x] = _obj;
 	}
 	
 	public void switchObj(Vector2 _pos1,Vector2 _pos2) {
@@ -100,4 +176,5 @@ public class Grid {
 		if(_x<0 || _y<0 || _x>=bound_x || _y>=bound_y) return null;
 		return arr[_y][_x];
 	}
+	
 }
