@@ -1,10 +1,12 @@
 package MovBlok.Objects;
 
+import java.awt.Graphics;
+
 import UnifyEngine.GameObject;
 
 public class Box extends GameObject {
 	public Box(int _x, int _y) {
-		super(_x,_y,"MovBlok/resources/box_low_res.png",1);
+		super(_x,_y, 1,"MovBlok/resources/box_low_res.png");
 	}
 
 	@Override
@@ -12,5 +14,5 @@ public class Box extends GameObject {
 		// TODO Auto-generated method stub
 		
 	}
-	
+
 }

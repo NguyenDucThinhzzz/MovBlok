@@ -66,13 +66,13 @@ public class DataHandler {
 		
 		try {
 			PrintWriter prt = new PrintWriter(file);
-			int x = grd.GetGridBoundX();
-			int y = grd.GetGridBoundY();
+			int x = grd.getBoundX();
+			int y = grd.getBoundY();
 			prt.println(x+" "+y);
 			for(int i=0;i<y;i++) {
 				for(int j=0;j<x;j++) {
 					Debug.Log(i +" "+ j+"\n");
-					prt.print(grd.getObj(j, i).GetID()+" ");
+					prt.print(grd.getObj(j, i).getID()+" ");
 				}
 				prt.println();
 			}

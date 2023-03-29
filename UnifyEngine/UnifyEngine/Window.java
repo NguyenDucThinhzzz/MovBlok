@@ -6,12 +6,11 @@ import java.awt.*;
 public abstract class Window extends JFrame{
 	//Window values
 	protected String wd_title;
-	public String GetTitle() {
+	public String getTitle() {
 		return wd_title;
 	}
 	
 	protected Image engine_icon = (new ImageIcon("UnifyEngine/resources/UNiFY-Engine.png")).getImage();
-	
 	protected boolean wd_exit = false;
 	
 	protected Window(int _width, int _height, String _title) {

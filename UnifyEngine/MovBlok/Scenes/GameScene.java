@@ -1,6 +1,7 @@
 package MovBlok.Scenes;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -22,15 +23,15 @@ import MovBlok.Scripts.MovBlokApp;
 import MovBlok.Scripts.SaveManager.DataHandler;
 
 public class GameScene extends Scene {
-	public static Player plr;
-	protected int width = MovBlokApp.GetWindow().getWidth()/2;
-	protected int height = MovBlokApp.GetWindow().getHeight()/2;
+	private int width = MovBlokApp.GetWindow().getWidth()/2;
+	private int height = MovBlokApp.GetWindow().getHeight()/2;
 	private Grid grd;
+	private Player plr;
 	private GameStates curGameState = GameStates.InGame;
 	
 	public GameScene() {
 		super();
-		grd = new Grid(8, 8, width, height, (new ImageIcon("MovBlok/resources/test_box.png")).getImage());
+		grd = new Grid(8, 8, width, height);
 		plr = new Player(grd.ReadFileData("Movblok/MapData/Input"));
 		grd.addObj(plr);
 	}
@@ -39,8 +40,8 @@ public class GameScene extends Scene {
 	protected void Start() {
 		MovBlokApp.GetWindow().addKeyListener(new ControlAdapter());
 		this.revalidate();
-		for(int i=0;i<grd.GetGridBoundY();i++) {
-			for(int j=0;j<grd.GetGridBoundX();j++) {
+		for(int i=0;i<grd.getBoundY();i++) {
+			for(int j=0;j<grd.getBoundX();j++) {
 				if(grd.getObj(j,i)==null){
 					grd.addObj(new Ground(j,i));
 				}
@@ -48,13 +49,13 @@ public class GameScene extends Scene {
 		}
 //		//Testing
 //		grd.addObj(new Box(3,1));
-//		for(int i=0;i<grd.GetGridBoundX();i++) {
+//		for(int i=0;i<grd.getBoundX();i++) {
 //			grd.addObj(new Wall(i,0));
-//			grd.addObj(new Wall(i,grd.GetGridBoundY()-1));
+//			grd.addObj(new Wall(i,grd.getBoundY()-1));
 //		}
-//		for(int i=0;i<grd.GetGridBoundY();i++) {
+//		for(int i=0;i<grd.getBoundY();i++) {
 //			grd.addObj(new Wall(0,i));
-//			grd.addObj(new Wall(grd.GetGridBoundX()-1,i));
+//			grd.addObj(new Wall(grd.getBoundX()-1,i));
 //		}
 //		for(int i=1;i<7;i++) {
 //			if(i==5) continue;
@@ -83,7 +84,8 @@ public class GameScene extends Scene {
 			break;
 		case WinGame:
 			g.setColor(Color.green);
-			g.drawString("YOU WIN!!!", width, height);
+			g.setFont(new Font("TimesRoman",Font.BOLD,100));
+			g.drawString("YOU WIN!!!", width/2+100, height);
 			break;
 		case PauseGame:
 			break;
@@ -101,6 +103,7 @@ public class GameScene extends Scene {
 	    public void keyPressed(KeyEvent e) {
 
 	        int key = e.getKeyCode();
+	        
 
 	        if (key == KeyEvent.VK_ESCAPE) {
 	        	Debug.Log("\t\tPause Menu");
@@ -112,6 +115,12 @@ public class GameScene extends Scene {
 	        }
 	        
 	        if(curGameState!=GameStates.InGame) return; 
+	        
+	        if (key == KeyEvent.VK_R) {
+	        	plr = new Player(grd.ReadFileData("Movblok/MapData/Input"));
+	    		grd.addObj(plr);
+	    		return;
+	        }
 	        
 	        if ((key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT) && plr.position.x>0) {
 	        	Debug.Log("L");
@@ -143,7 +152,7 @@ public class GameScene extends Scene {
 	        	return;
 	        }
 
-	        if ((key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) && plr.position.x<grd.GetGridBoundX()-1) {
+	        if ((key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) && plr.position.x<grd.getBoundX()-1) {
 	        	Debug.Log("R");
 	        	GameObject temp = grd.getObj(plr.position.x+1,plr.position.y);
 	        	if( temp == null) return;
@@ -203,7 +212,7 @@ public class GameScene extends Scene {
 				return;
 	        }
 
-	        if ((key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN) && plr.position.y<grd.GetGridBoundY()-1) {
+	        if ((key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN) && plr.position.y<grd.getBoundY()-1) {
 	        	Debug.Log("D");
 	        	GameObject temp = grd.getObj(plr.position.x,plr.position.y+1);
 	        	if( temp == null) return;

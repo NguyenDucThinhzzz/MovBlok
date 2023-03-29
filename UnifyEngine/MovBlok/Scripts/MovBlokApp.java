@@ -13,7 +13,7 @@ public class MovBlokApp extends Window {
 		return window;
 	}
 	//Game values
-	private ApplicationStates currentState = ApplicationStates.Game;
+	private ApplicationStates currentState = ApplicationStates.Menu;
 	public void SetCurrentState(ApplicationStates _state) {
 		currentState = _state;
 	}
@@ -36,7 +36,7 @@ public class MovBlokApp extends Window {
 	@Override
 	protected void init() {
 		setIconImage(engine_icon);
-		setLayout(new GridLayout(1,1));
+		setLayout(new GridLayout(1,4));
 	}
 	
 	@Override

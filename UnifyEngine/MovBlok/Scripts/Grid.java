@@ -23,28 +23,25 @@ import UnifyEngine.Vector2;
 public class Grid {
 	
 	private GameObject[][] arr;
-	public int renderDist;
+	private int renderDist;
+	private int boxSize;
 	private int hlf_wdt;
 	private int hlf_hgt;
-	public int boxSize;
-	public Image defaultTile;
-	
 	
 	private int bound_x=0;
-	public int GetGridBoundX() {
+	public int getBoundX() {
 		return bound_x;
 	}
 	private int bound_y=0;
-	public int GetGridBoundY() {
+	public int getBoundY() {
 		return bound_y;
 	}
 	
-	public Grid(int _x,int _y, int _width, int _height, Image _defaultTile) {
+	public Grid(int _x,int _y, int _width, int _height) {
 		this.bound_x = _x;
 		this.bound_y = _y;
 		this.hlf_wdt = _width;
 		this.hlf_hgt = _height;
-		this.defaultTile = _defaultTile;
 		arr = new GameObject[_y][_x];
 		for(GameObject[] i: arr) {
 			for(GameObject j: i) {
@@ -73,9 +70,7 @@ public class Grid {
 			for(int j = left; j <= right; j++) {
 				if(i<0 || j<0 || j>=bound_x || i>=bound_y) continue;
 				if(arr[i][j] != null) {
-					if(arr[i][j].img!=null) {
-						g.drawImage(arr[i][j].img, (j-left-renderDist)*boxSize+hlf_wdt-boxSize/2, (i-bot-renderDist)*boxSize+hlf_hgt-boxSize/2, boxSize, boxSize, p);
-					}
+					arr[i][j].draw(g,(j-left-renderDist)*boxSize+hlf_wdt-boxSize/2, (i-bot-renderDist)*boxSize+hlf_hgt-boxSize/2, boxSize, boxSize, p);
 				}
 				if(Debug.enable) {
 					g.drawRect((j-left-renderDist)*boxSize+hlf_wdt-boxSize/2, (i-bot-renderDist)*boxSize+hlf_hgt-boxSize/2, boxSize, boxSize);
@@ -135,12 +130,12 @@ public class Grid {
 		
 		try {
 			PrintWriter prt = new PrintWriter(new File(_filePath));
-			int x = GetGridBoundX();
-			int y = GetGridBoundY();
+			int x = getBoundX();
+			int y = getBoundY();
 			prt.println(x+" "+y);
 			for(int i=0;i<y;i++) {
 				for(int j=0;j<x;j++) {
-					prt.print(getObj(j, i).GetID()+" ");
+					prt.print(getObj(j, i).getID()+" ");
 				}
 				prt.println();
 			}
