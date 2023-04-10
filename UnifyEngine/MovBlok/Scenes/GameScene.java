@@ -6,8 +6,12 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import UnifyEngine.Scene;
@@ -28,6 +32,7 @@ public class GameScene extends Scene {
 	private Grid grd;
 	private Player plr;
 	private GameStates curGameState = GameStates.InGame;
+	private BufferedImage winBackground;
 	
 	public GameScene() {
 		super();
@@ -38,6 +43,12 @@ public class GameScene extends Scene {
 
 	@Override
 	protected void Start() {
+		try {
+			winBackground = ImageIO.read(new File("MovBlok/resources/vanheo.jpg"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		MovBlokApp.GetWindow().addKeyListener(new ControlAdapter());
 		this.revalidate();
 		for(int i=0;i<grd.getBoundY();i++) {
@@ -83,9 +94,10 @@ public class GameScene extends Scene {
 			grd.drawGrid(g, this, plr.position);
 			break;
 		case WinGame:
+			g.drawImage(winBackground, 0,0, width*2,height*2, this);
 			g.setColor(Color.green);
 			g.setFont(new Font("TimesRoman",Font.BOLD,100));
-			g.drawString("YOU WIN!!!", width/2+100, height);
+			g.drawString("Victory!!!", width/2+100, height);
 			break;
 		case PauseGame:
 			break;

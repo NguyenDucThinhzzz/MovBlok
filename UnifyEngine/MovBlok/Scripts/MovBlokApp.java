@@ -1,5 +1,6 @@
 package MovBlok.Scripts;
 
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import javax.swing.JFrame;
 import MovBlok.Scenes.*;
@@ -36,7 +37,7 @@ public class MovBlokApp extends Window {
 	@Override
 	protected void init() {
 		setIconImage(engine_icon);
-		setLayout(new GridLayout(1,4));
+		setLayout(new BorderLayout());
 	}
 	
 	@Override
