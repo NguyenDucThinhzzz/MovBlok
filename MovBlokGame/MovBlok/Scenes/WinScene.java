@@ -7,6 +7,11 @@ import java.awt.Graphics;
 import UnifyEngine.Scene;
 
 public class WinScene extends Scene{
+	@Override
+	protected void Awake() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	protected void Start() {
@@ -33,5 +38,6 @@ public class WinScene extends Scene{
 		g.setColor(Color.LIGHT_GRAY);
 		g.drawString("YOU WIN!!!!", 100, 100);
 	}
+
 
 }

@@ -1,7 +1,8 @@
 package MovBlok.Scripts;
 
-public enum ApplicationStates {
+public enum MovBlokScenes {
 	Menu,
 	Game,
+	MapCreate,
 	Quit,
 }

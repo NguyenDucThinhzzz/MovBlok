@@ -1,8 +1,10 @@
 package MovBlok.Scenes;
 
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -12,43 +14,55 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import MovBlok.Scripts.ApplicationStates;
 import MovBlok.Scripts.MovBlokApp;
+import MovBlok.Scripts.MovBlokScenes;
 import UnifyEngine.Scene;
 
-public class MenuScene extends Scene{
+public class MenuScene extends Scene implements ActionListener{
 	protected int width = MovBlokApp.GetWindow().getWidth()/2;
 	protected int height = MovBlokApp.GetWindow().getHeight()/2;
-	private JButton startBut = null;
 	private int buttonWidth = 100;
 	private int buttonHeight = 40;
 	private Font mainFont = (new Font("TimesRoman",Font.BOLD,100));
 	private BufferedImage background;
 	
+	private JButton startBut = null;
+	private JButton mapEditorBut = null;
+	private JButton quitBut = null;
+	
 	public MenuScene() {
 		super();
+	}
+	@Override
+	protected void Awake() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	protected void Start() {
-		try {
-			background = ImageIO.read(new File("MovBlok/resources/yasuo.jpg"));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		setBackground(Color.gray);
+		loadImages();
+		this.setLayout(null);
+		this.setBackground(Color.black);
+		
 		startBut = new JButton("Start Game");
         startBut.setFocusable(false);
 		startBut.setBounds(width-buttonWidth/2, height+30, buttonWidth, buttonHeight);
-		this.add(startBut);
-		startBut.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                MovBlokApp.GetWindow().SetCurrentState(ApplicationStates.Game);
-                exitScene();
-            }
-        });
+		startBut.addActionListener(this);
 		
+		mapEditorBut = new JButton("Create Map");
+		mapEditorBut.setFocusable(false);
+		mapEditorBut.setBounds(width-buttonWidth/2, height+90, buttonWidth, buttonHeight);
+		mapEditorBut.addActionListener(this);
+		
+		quitBut = new JButton("Quit Game");
+		quitBut.setFocusable(false);
+		quitBut.setBounds(width-buttonWidth/2, height+150, buttonWidth, buttonHeight);
+		quitBut.addActionListener(this);
+		
+		this.add(startBut);
+		this.add(mapEditorBut);
+		this.add(quitBut);
 	}
 
 	@Override
@@ -73,4 +87,26 @@ public class MenuScene extends Scene{
 		g.drawString("MovBlok", width/2+110, height-100);
 	}
 	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == startBut) {
+			MovBlokApp.GetWindow().SetCurrentState(MovBlokScenes.Game);
+		}
+		if(e.getSource() == mapEditorBut) {
+			MovBlokApp.GetWindow().SetCurrentState(MovBlokScenes.MapCreate);
+		}
+		if(e.getSource() == quitBut) {
+			MovBlokApp.GetWindow().SetCurrentState(MovBlokScenes.Quit);
+		}
+		exitScene();
+	}	
+	
+	private void loadImages() {
+		try {
+			background = ImageIO.read(new File("MovBlok/resources/yasuo.jpg"));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 }

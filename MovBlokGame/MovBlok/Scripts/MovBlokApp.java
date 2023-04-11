@@ -14,12 +14,13 @@ public class MovBlokApp extends Window {
 		return window;
 	}
 	//Game values
-	private ApplicationStates currentState = ApplicationStates.Menu;
-	public void SetCurrentState(ApplicationStates _state) {
-		currentState = _state;
+	private MovBlokScenes currentScene = MovBlokScenes.Menu;
+	public void SetCurrentState(MovBlokScenes _state) {
+		currentScene = _state;
 	}
 	//Game scenes
 	private GameScene gamePan;
+	private MapCreateScene mapCreatePan;
 	private MenuScene menuPan;
 	
 	private MovBlokApp(int _width, int _height, String _title) {
@@ -43,10 +44,10 @@ public class MovBlokApp extends Window {
 	@Override
 	protected void gameLoop() {
 		while(!wd_exit) {
-			switch(currentState) {
+			switch(currentScene) {
 				case Menu:
 				{
-					Debug.Log("Menu==========");
+					Debug.Log("==========Menu==========");
 					menuPan = new MenuScene();
 					window.add(menuPan);
 					menuPan.execute();
@@ -56,7 +57,7 @@ public class MovBlokApp extends Window {
 				}
 				case Game:
 				{
-					Debug.Log("Game==========");
+					Debug.Log("==========Game==========");
 					gamePan = new GameScene();
 					window.add(gamePan);
 					gamePan.execute();
@@ -64,9 +65,19 @@ public class MovBlokApp extends Window {
 					gamePan=null;
 					break;
 				}
+				case MapCreate:
+				{
+					Debug.Log("==========Map Creator==========");
+					mapCreatePan = new MapCreateScene();
+					window.add(mapCreatePan);
+					mapCreatePan.execute();
+					window.remove(mapCreatePan);
+					mapCreatePan=null;
+					break;
+				}
 				case Quit:
 				{
-					Debug.Log("Quit==========");
+					Debug.Log("==========Quit==========");
 					wd_exit = true;
 					break;
 				}

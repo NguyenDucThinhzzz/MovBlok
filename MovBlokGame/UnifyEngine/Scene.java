@@ -7,10 +7,13 @@ import javax.swing.*;
 
 public abstract class Scene extends JPanel{
 	
+	
 	private boolean exit = false;
 
 	protected Scene() {
+		Awake();
 	}
+	protected abstract void Awake();
     
 	protected abstract void Start();
 	

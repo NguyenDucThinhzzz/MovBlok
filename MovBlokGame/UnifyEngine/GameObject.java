@@ -13,11 +13,8 @@ import javax.swing.ImageIcon;
 
 public abstract class GameObject{
 	private int ID;
-	public int getID() {
-		return ID;
-	}
-	public Vector2 position;
-	public BufferedImage img = null;
+	private Vector2 position;
+	private BufferedImage img = null;
 	
 	public GameObject() {
 	}
@@ -52,4 +49,17 @@ public abstract class GameObject{
 	}
 
 	public abstract void update();
+	
+	public int getID() {
+		return ID;
+	}
+	public Vector2 getPos() {
+		return position;
+	}
+	public void setPos(Vector2 _vec) {
+		position = _vec;
+	}
+	public BufferedImage getImg() {
+		return img;
+	}
 }

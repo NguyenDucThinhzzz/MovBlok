@@ -26,7 +26,7 @@ import MovBlok.Scripts.GameStates;
 import MovBlok.Scripts.MovBlokApp;
 import MovBlok.Scripts.MovBlokScenes;
 
-public class GameScene extends Scene {
+public class MapCreateScene extends Scene {
 	private int width;
 	private int height;
 	private Grid grd;
@@ -38,7 +38,7 @@ public class GameScene extends Scene {
 	private int renderDist;
 	private int boxSize;
 	
-	public GameScene() {
+	public MapCreateScene() {
 		super();
 	}
 	
@@ -94,7 +94,9 @@ public class GameScene extends Scene {
 //		}
 //		grd.addObj(new Portal(6,6));
 		dataHandler.setDataFile("MovBlok/MapData/Test");
+		dataHandler.openFileWrite();
 		dataHandler.WriteFileData(grd,plr);
+		dataHandler.closeFile();
 	}
 	
 	@Override
@@ -190,116 +192,32 @@ public class GameScene extends Scene {
 	        if ((key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT) && plr.getPos().x>0) {
 	        	GameObject temp = grd.getObj(plr.getPos().x-1,plr.getPos().y);
 	        	if( temp == null) return;
-				if( temp instanceof Wall) {
-					return;
-				}
-				if( temp instanceof Ground) {
-					grd.switchObj(new Vector2(plr.getPos().x-1,plr.getPos().y), plr.getPos());
-					plr.getPos().x--;
-					return;
-				}
-
-				if( temp instanceof Box) {
-					GameObject nextObj = grd.getObj(plr.getPos().x-2,plr.getPos().y);
-					if(nextObj==null) return;
-					if(nextObj instanceof Ground) {
-						grd.switchObj(new Vector2(plr.getPos().x-2,plr.getPos().y), new Vector2(plr.getPos().x-1,plr.getPos().y));
-						grd.switchObj(new Vector2(plr.getPos().x-1,plr.getPos().y), plr.getPos());
-						plr.getPos().x--;
-					}
-					return;
-				}
-				if( temp instanceof Portal) {
-					win();
-					return;
-				}
+				plr.getPos().x--;
+				
 	        	return;
 	        }
 
 	        if ((key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) && plr.getPos().x<grd.getBoundX()-1) {
 	        	GameObject temp = grd.getObj(plr.getPos().x+1,plr.getPos().y);
 	        	if( temp == null) return;
-				if( temp instanceof Wall) {
-					return;
-				}
-				if( temp instanceof Ground) {
-					grd.switchObj(new Vector2(plr.getPos().x+1,plr.getPos().y), plr.getPos());
-					plr.getPos().x++;
-					return;
-				}
-
-				if( temp instanceof Box) {
-					GameObject nextObj = grd.getObj(plr.getPos().x+2,plr.getPos().y);
-					if(nextObj==null) return;
-					if(nextObj instanceof Ground) {
-						grd.switchObj(new Vector2(plr.getPos().x+2,plr.getPos().y), new Vector2(plr.getPos().x+1,plr.getPos().y));
-						grd.switchObj(new Vector2(plr.getPos().x+1,plr.getPos().y), plr.getPos());
-						plr.getPos().x++;
-					}
-					return;
-				}
-				if( temp instanceof Portal) {
-					win();
-					return;
-				}
+				plr.getPos().x++;
+				
 	        	return;
 	        }
 
 	        if ((key == KeyEvent.VK_W || key == KeyEvent.VK_UP)&& plr.getPos().y>0) {
 	        	GameObject temp = grd.getObj(plr.getPos().x,plr.getPos().y-1);
 	        	if( temp == null) return;
-				if( temp instanceof Wall) {
-					return;
-				}
-				if( temp instanceof Ground) {
-					grd.switchObj(new Vector2(plr.getPos().x,plr.getPos().y-1), plr.getPos());
-					plr.getPos().y--;
-					return;
-				}
-
-				if( temp instanceof Box) {
-					GameObject nextObj = grd.getObj(plr.getPos().x,plr.getPos().y-2);
-					if(nextObj==null) return;
-					if(nextObj instanceof Ground) {
-						grd.switchObj(new Vector2(plr.getPos().x,plr.getPos().y-2), new Vector2(plr.getPos().x,plr.getPos().y-1));
-						grd.switchObj(new Vector2(plr.getPos().x,plr.getPos().y-1), plr.getPos());
-						plr.getPos().y--;
-					}
-					return;
-				}
-				if( temp instanceof Portal) {
-					win();
-					return;
-				}
+				plr.getPos().y--;
+				
 				return;
 	        }
 
 	        if ((key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN) && plr.getPos().y<grd.getBoundY()-1) {
 	        	GameObject temp = grd.getObj(plr.getPos().x,plr.getPos().y+1);
 	        	if( temp == null) return;
-				if( temp instanceof Wall) {
-					return;
-				}
-				if( temp instanceof Ground) {
-					grd.switchObj(new Vector2(plr.getPos().x,plr.getPos().y+1), plr.getPos());
-					plr.getPos().y++;
-					return;
-				}
-
-				if( temp instanceof Box) {
-					GameObject nextObj = grd.getObj(plr.getPos().x,plr.getPos().y+2);
-					if(nextObj==null) return;
-					if(nextObj instanceof Ground) {
-						grd.switchObj(new Vector2(plr.getPos().x,plr.getPos().y+2), new Vector2(plr.getPos().x,plr.getPos().y+1));
-						grd.switchObj(new Vector2(plr.getPos().x,plr.getPos().y+1), plr.getPos());
-						plr.getPos().y++;
-					}
-					return;
-				}
-				if( temp instanceof Portal) {
-					win();
-					return;
-				}
+				plr.getPos().y++;
+				
 	        	return;
 	        }
 	    }

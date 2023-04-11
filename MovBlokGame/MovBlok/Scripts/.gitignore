@@ -8,3 +8,7 @@
 /ObjectType.class
 /ApplicationStates.class
 /Grid.class
+/GameManager.class
+/GameScenes.class
+/MovBlokScenes.class
+/DataHandler.class
