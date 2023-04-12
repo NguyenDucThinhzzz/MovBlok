@@ -1,10 +1,8 @@
 package MovBlok.Scenes;
 
 import java.awt.Color;
-import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -16,6 +14,7 @@ import javax.swing.*;
 
 import MovBlok.Scripts.MovBlokApp;
 import MovBlok.Scripts.MovBlokScenes;
+import UnifyEngine.Debug;
 import UnifyEngine.Scene;
 
 public class MenuScene extends Scene implements ActionListener{

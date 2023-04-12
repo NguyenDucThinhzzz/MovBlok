@@ -1,22 +1,5 @@
 package UnifyEngine;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.Scanner;
-
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-
-import MovBlok.Objects.Box;
-import MovBlok.Objects.Ground;
-import MovBlok.Objects.Portal;
-import MovBlok.Objects.Wall;
-import MovBlok.Scripts.DataHandler;
-
 public class Grid {
 	private int bound_x=0;
 	private int bound_y=0;
@@ -26,11 +9,6 @@ public class Grid {
 		this.bound_x = _x;
 		this.bound_y = _y;
 		arr = new GameObject[_y][_x];
-		for(GameObject[] i: arr) {
-			for(GameObject j: i) {
-				j=null;
-			}
-		}
 	}
 	
 	public Grid(int _x, int _y, GameObject[][] _arr) {

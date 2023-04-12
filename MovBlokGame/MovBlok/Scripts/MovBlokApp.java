@@ -1,8 +1,6 @@
 package MovBlok.Scripts;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import javax.swing.JFrame;
 import MovBlok.Scenes.*;
 import UnifyEngine.Window;
 import UnifyEngine.Debug;

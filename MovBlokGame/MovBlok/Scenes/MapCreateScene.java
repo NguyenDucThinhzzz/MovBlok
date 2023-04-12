@@ -1,24 +1,16 @@
 package MovBlok.Scenes;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import UnifyEngine.Scene;
 import UnifyEngine.Debug;
 import UnifyEngine.GameObject;
 import UnifyEngine.Grid;
-import UnifyEngine.Vector2;
 import MovBlok.Objects.*;
 import MovBlok.Objects.Box;
 import MovBlok.Scripts.DataHandler;
@@ -32,9 +24,9 @@ public class MapCreateScene extends Scene {
 	private Grid grd;
 	private Player plr;
 	private GameStates curGameState = GameStates.InGame;
-	private BufferedImage winBackground;
 	private DataHandler dataHandler;
 	
+	private GameObject selector = new Box();
 	private int renderDist;
 	private int boxSize;
 	
@@ -44,6 +36,7 @@ public class MapCreateScene extends Scene {
 	
 	@Override
 	protected void Awake() {
+		Debug.enable = false;
 		dataHandler = new DataHandler();
 		dataHandler.setDataFile("Movblok/MapData/Input");
 	}
@@ -52,22 +45,14 @@ public class MapCreateScene extends Scene {
 	protected void Start() {
 		width = MovBlokApp.GetWindow().getWidth()/2;
 		height = MovBlokApp.GetWindow().getHeight()/2;
-		//Read map data
-		dataHandler.openFileRead();
-		grd = dataHandler.ReadGridData();
-		plr = dataHandler.ReadPlayerData();
-		dataHandler.closeFile();
-		grd.addObj(plr);
 
+		grd = new Grid(100,100);
+		plr = new Player(0,0) ;
 		//Aspect ratio change in the future for now it's 1280x720 (16:9)
 		boxSize=80;
 		renderDist = width/boxSize+1;
-		try {
-			winBackground = ImageIO.read(new File("MovBlok/resources/vanheo.jpg"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		
 		MovBlokApp.GetWindow().addKeyListener(new ControlAdapter());
 		this.revalidate();
 		for(int i=0;i<grd.getBoundY();i++) {
@@ -93,7 +78,7 @@ public class MapCreateScene extends Scene {
 //			grd.addObj(new Wall(i,2));
 //		}
 //		grd.addObj(new Portal(6,6));
-		dataHandler.setDataFile("MovBlok/MapData/Test");
+		dataHandler.setDataFile("MovBlok/MapData/Map1");
 		dataHandler.openFileWrite();
 		dataHandler.WriteFileData(grd,plr);
 		dataHandler.closeFile();
@@ -117,12 +102,6 @@ public class MapCreateScene extends Scene {
 			
 			drawGrid(g);
 			break;
-		case WinGame:
-			g.drawImage(winBackground, 0,0, width*2,height*2, this);
-			g.setColor(Color.green);
-			g.setFont(new Font("TimesRoman",Font.BOLD,100));
-			g.drawString("Victory!!!", width/2+100, height);
-			break;
 		case PauseGame:
 			break;
 		}
@@ -142,25 +121,31 @@ public class MapCreateScene extends Scene {
 					if(grd.getObj(j,i) != null) {
 						grd.getObj(j,i).draw(g,(j-left-renderDist)*boxSize+width-boxSize/2, (i-bot-renderDist)*boxSize+height-boxSize/2, boxSize, boxSize, this);
 					}
+					g.drawRect((j-left-renderDist)*boxSize+width-boxSize/2, (i-bot-renderDist)*boxSize+height-boxSize/2, boxSize, boxSize);
 					if(Debug.enable) {
-						g.drawRect((j-left-renderDist)*boxSize+width-boxSize/2, (i-bot-renderDist)*boxSize+height-boxSize/2, boxSize, boxSize);
 						g.drawString("( "+ i +", "+j+")",(j-left-renderDist)*boxSize+boxSize/4+width-boxSize/2, (i-bot-renderDist)*boxSize+boxSize/2+height-boxSize/2);
 					}
 				}
 			}
+			g.setColor(Color.pink);
 			if(Debug.enable) {
 				g.setColor(Color.pink);
+
 				g.drawRect(width-boxSize/2, height-boxSize/2, boxSize, boxSize);
 			}
 		}
 		catch(NullPointerException ex) {
 			
 		}
+		finally{
+			g.drawLine(width-10, height, width+10, height);
+			g.drawLine(width, height-10, width, height+10);
+		}
 	}
 	
-	private void win() {
-		curGameState = GameStates.WinGame;
-	}
+//	private void win() {
+//		curGameState = GameStates.WinGame;
+//	}
 	
 	public class ControlAdapter extends KeyAdapter {
 		
@@ -181,41 +166,59 @@ public class MapCreateScene extends Scene {
 	        
 	        if(curGameState!=GameStates.InGame) return; 
 	        
-	        if (key == KeyEvent.VK_R) {
-	        	dataHandler.setDataFile("Movblok/MapData/Input");
-	        	grd = dataHandler.ReadGridData();
-	        	plr = dataHandler.ReadPlayerData();
-	    		grd.addObj(plr);
-	    		return;
+	        if(key == KeyEvent.VK_1) {
+	        	selector = new Box();
+	        	return;
+	        }
+	        if(key == KeyEvent.VK_2) {
+	        	selector = new Ground();
+	        	return;
+	        }
+	        if(key == KeyEvent.VK_3) {
+	        	selector = new Player();
+	        	return;
+	        }
+	        if(key == KeyEvent.VK_4) {
+	        	selector = new Portal();
+	        	return;
+	        }
+	        if(key == KeyEvent.VK_5) {
+	        	selector = new Wall();
+	        	return;
+	        }
+	        if(key == KeyEvent.VK_SPACE) {
+	        	if(selector instanceof Box)
+	        		grd.addObj(new Box(plr.getPos().x,plr.getPos().y));
+	        	if(selector instanceof Ground)
+	        		grd.addObj(new Ground(plr.getPos().x,plr.getPos().y));
+	        	if(selector instanceof Player)
+	        		grd.addObj(new Player(plr.getPos().x,plr.getPos().y));
+	        	if(selector instanceof Portal)
+	        		grd.addObj(new Portal(plr.getPos().x,plr.getPos().y));
+	        	if(selector instanceof Wall)
+	        		grd.addObj(new Wall(plr.getPos().x,plr.getPos().y));
+	        	return;
 	        }
 	        
 	        if ((key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT) && plr.getPos().x>0) {
-	        	GameObject temp = grd.getObj(plr.getPos().x-1,plr.getPos().y);
-	        	if( temp == null) return;
 				plr.getPos().x--;
 				
 	        	return;
 	        }
 
 	        if ((key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) && plr.getPos().x<grd.getBoundX()-1) {
-	        	GameObject temp = grd.getObj(plr.getPos().x+1,plr.getPos().y);
-	        	if( temp == null) return;
 				plr.getPos().x++;
 				
 	        	return;
 	        }
 
 	        if ((key == KeyEvent.VK_W || key == KeyEvent.VK_UP)&& plr.getPos().y>0) {
-	        	GameObject temp = grd.getObj(plr.getPos().x,plr.getPos().y-1);
-	        	if( temp == null) return;
 				plr.getPos().y--;
 				
 				return;
 	        }
 
 	        if ((key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN) && plr.getPos().y<grd.getBoundY()-1) {
-	        	GameObject temp = grd.getObj(plr.getPos().x,plr.getPos().y+1);
-	        	if( temp == null) return;
 				plr.getPos().y++;
 				
 	        	return;

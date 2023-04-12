@@ -2,23 +2,18 @@ package MovBlok.Scripts;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import MovBlok.Objects.*;
-import MovBlok.Scenes.GameScene;
 import UnifyEngine.Debug;
-import UnifyEngine.GameObject;
 import UnifyEngine.Grid;
-import UnifyEngine.Vector2;
 
 public class DataHandler {
 	private PrintWriter prt;
 	private Scanner scn;
 	private File file = null;
-	private GameObject[][] fileObjs;
 	
 	public DataHandler() {
 
@@ -34,7 +29,6 @@ public class DataHandler {
 	public void openFileRead(){
 		try {
 			scn = new Scanner(file);
-			int c;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			Debug.LogError("Your file directory is either NULL or wrong!");
