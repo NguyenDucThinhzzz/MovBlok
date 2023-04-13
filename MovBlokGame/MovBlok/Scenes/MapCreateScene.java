@@ -15,6 +15,7 @@ import MovBlok.Objects.*;
 import MovBlok.Objects.Box;
 import MovBlok.Scripts.DataHandler;
 import MovBlok.Scripts.GameStates;
+import MovBlok.Scripts.MapCreatorState;
 import MovBlok.Scripts.MovBlokApp;
 import MovBlok.Scripts.MovBlokScenes;
 
@@ -23,7 +24,7 @@ public class MapCreateScene extends Scene {
 	private int height;
 	private Grid grd;
 	private Player plr;
-	private GameStates curGameState = GameStates.InGame;
+	private MapCreatorState curGameState = MapCreatorState.InGame;
 	private DataHandler dataHandler;
 	
 	private GameObject selector = new Box();
@@ -49,19 +50,20 @@ public class MapCreateScene extends Scene {
 		grd = new Grid(100,100);
 		plr = new Player(0,0) ;
 		//Aspect ratio change in the future for now it's 1280x720 (16:9)
-		boxSize=80;
+		boxSize= 80;
 		renderDist = width/boxSize+1;
 
 		
 		MovBlokApp.GetWindow().addKeyListener(new ControlAdapter());
 		this.revalidate();
-		for(int i=0;i<grd.getBoundY();i++) {
-			for(int j=0;j<grd.getBoundX();j++) {
-				if(grd.getObj(j,i)==null){
-					grd.addObj(new Ground(j,i));
-				}
-			}
-		}
+//		for(int i=0;i<grd.getBoundY();i++) {
+//			for(int j=0;j<grd.getBoundX();j++) {
+//				if(grd.getObj(j,i)==null){
+//					grd.addObj(new Ground(j,i));
+//				}
+//				Debug.Log(j+" "+i);
+//			}
+//		}
 
 //		//Testing
 //		grd.addObj(new Box(3,1));
@@ -98,8 +100,10 @@ public class MapCreateScene extends Scene {
 	protected void doDrawing(Graphics g) {
 		g.drawImage((new ImageIcon("UnifyEngine/resources/UNiFY-Engine.png")).getImage(),0,0,this);
 		switch(curGameState) {
+		case Creation:
+			drawCreationUI(g);
+			break;
 		case InGame:
-			
 			drawGrid(g);
 			break;
 		case PauseGame:
@@ -141,6 +145,10 @@ public class MapCreateScene extends Scene {
 			g.drawLine(width-10, height, width+10, height);
 			g.drawLine(width, height-10, width, height+10);
 		}
+	}
+	
+	private void drawCreationUI(Graphics g) {
+		
 	}
 	
 //	private void win() {

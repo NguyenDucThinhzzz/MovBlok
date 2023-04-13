@@ -59,4 +59,7 @@ public abstract class GameObject{
 	public BufferedImage getImg() {
 		return img;
 	}
+	public void setImg(BufferedImage _img) {
+		this.img = _img;
+	}
 }

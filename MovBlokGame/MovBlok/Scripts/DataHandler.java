@@ -118,7 +118,10 @@ public class DataHandler {
 			prt.println(x+" "+y);
 			for(int i=0;i<y;i++) {
 				for(int j=0;j<x;j++) {
-					prt.print(grd.getObj(j, i).getID()+" ");
+					if(grd.getObj(j, i)== null) 
+						prt.print(-1+" ");
+					else 
+						prt.print(grd.getObj(j, i).getID()+" ");
 				}
 				prt.println();
 			}

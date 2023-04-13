@@ -5,3 +5,6 @@
 /Window.class
 /Debug.class
 /ObjectType.class
+/Prefab.class
+/updateable.class
+/IUpdateable.class
