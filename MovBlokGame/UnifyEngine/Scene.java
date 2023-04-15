@@ -42,6 +42,7 @@ public abstract class Scene extends JPanel{
     private void initScene() {
     	setBackground(Color.black);
     	setFocusable(false);
+		setLayout(null);
     	setVisible(true);
     }
     

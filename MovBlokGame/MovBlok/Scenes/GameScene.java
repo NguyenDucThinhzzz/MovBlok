@@ -3,6 +3,8 @@ package MovBlok.Scenes;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -24,17 +26,24 @@ import MovBlok.Scripts.GameStates;
 import MovBlok.Scripts.MovBlokApp;
 import MovBlok.Scripts.MovBlokScenes;
 
-public class GameScene extends Scene {
+public class GameScene extends Scene implements ActionListener{
 	private int width;
 	private int height;
 	private Grid grd;
 	private Player plr;
-	private GameStates curGameState = GameStates.InGame;
+	private GameStates curGameState = GameStates.Loading;
+	private GameStates lastGameState = curGameState;
 	private BufferedImage winBackground;
 	private DataHandler dataHandler;
 	
 	private int renderDist;
 	private int boxSize;
+	
+	//Pause Screen Variables
+	private JButton resumeBut;
+	private JButton restartBut;
+	private JButton settingsBut;
+	private JButton menuBut;
 	
 	public GameScene() {
 		super();
@@ -42,14 +51,23 @@ public class GameScene extends Scene {
 	
 	@Override
 	protected void Awake() {
+		width = MovBlokApp.GetWindow().getWidth()/2;
+		height = MovBlokApp.GetWindow().getHeight()/2;
+		MovBlokApp.GetWindow().addKeyListener(new ControlAdapter());
+
 		dataHandler = new DataHandler();
 		dataHandler.setDataFile("Movblok/MapData/Input");
+		try {
+			winBackground = ImageIO.read(new File("MovBlok/resources/vanheo.jpg"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		loadButtons();
 	}
 
 	@Override
 	protected void Start() {
-		width = MovBlokApp.GetWindow().getWidth()/2;
-		height = MovBlokApp.GetWindow().getHeight()/2;
 		//Read map data
 		dataHandler.openFileRead();
 		grd = dataHandler.ReadGridData();
@@ -60,14 +78,7 @@ public class GameScene extends Scene {
 		//Aspect ratio change in the future for now it's 1280x720 (16:9)
 		boxSize=80;
 		renderDist = width/boxSize+1;
-		try {
-			winBackground = ImageIO.read(new File("MovBlok/resources/vanheo.jpg"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		MovBlokApp.GetWindow().addKeyListener(new ControlAdapter());
-		this.revalidate();
+		
 		for(int i=0;i<grd.getBoundY();i++) {
 			for(int j=0;j<grd.getBoundX();j++) {
 				if(grd.getObj(j,i)==null){
@@ -92,12 +103,14 @@ public class GameScene extends Scene {
 //		}
 //		grd.addObj(new Portal(6,6));
 		dataHandler.setDataFile("MovBlok/MapData/Test");
+		dataHandler.openFileWrite();
 		dataHandler.WriteFileData(grd,plr);
+		dataHandler.closeFile();
+		game();
 	}
 	
 	@Override
 	protected void Update() {
-		
 	}
 
 	@Override
@@ -107,10 +120,10 @@ public class GameScene extends Scene {
 	
 	@Override
 	protected void doDrawing(Graphics g) {
-		g.drawImage((new ImageIcon("UnifyEngine/resources/UNiFY-Engine.png")).getImage(),0,0,this);
 		switch(curGameState) {
+		case Loading:
+			break;
 		case InGame:
-			
 			drawGrid(g);
 			break;
 		case WinGame:
@@ -120,6 +133,7 @@ public class GameScene extends Scene {
 			g.drawString("Victory!!!", width/2+100, height);
 			break;
 		case PauseGame:
+			g.drawString("PAUSE", width, 100);
 			break;
 		}
 
@@ -154,9 +168,87 @@ public class GameScene extends Scene {
 		}
 	}
 	
+	private void loadButtons() {
+		int buttonWidth= 150;
+		int buttonHeight= 30;
+		
+		resumeBut = new JButton("Resume Game");
+		resumeBut.setFocusable(false);
+		resumeBut.setBounds(width-buttonWidth/2, height+30, buttonWidth, buttonHeight);
+		resumeBut.addActionListener(this);
+		
+		restartBut = new JButton("Restart Level");
+		restartBut.setFocusable(false);
+		restartBut.setBounds(width-buttonWidth/2, height+90, buttonWidth, buttonHeight);
+		restartBut.addActionListener(this);
+		
+		settingsBut = new JButton("Settings");
+		settingsBut.setFocusable(false);
+		settingsBut.setBounds(width-buttonWidth/2, height+150, buttonWidth, buttonHeight);
+		settingsBut.addActionListener(this);
+		
+		menuBut = new JButton("Return to Menu");
+		menuBut.setFocusable(false);
+		menuBut.setBounds(width-buttonWidth/2, height+210, buttonWidth, buttonHeight);
+		menuBut.addActionListener(this);
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource() == resumeBut) {
+			pause();
+		}
+		if(e.getSource() == restartBut) {
+        	dataHandler.setDataFile("Movblok/MapData/Input");
+        	dataHandler.openFileRead();
+        	grd = dataHandler.ReadGridData();
+        	plr = dataHandler.ReadPlayerData();
+    		grd.addObj(plr);
+    		dataHandler.closeFile();
+    		pause();
+		}
+		if(e.getSource() == settingsBut) {
+			
+		}
+		if(e.getSource() == menuBut) {
+        	MovBlokApp.GetWindow().setCurrentState(MovBlokScenes.Menu);
+        	exitScene();
+		}
+	}
+	
+	private void setLastState() {
+		lastGameState = curGameState;
+	}
+	
+	private void load() {
+		curGameState = GameStates.Loading;
+	}
 	private void win() {
+		setLastState();
 		curGameState = GameStates.WinGame;
 	}
+	private void pause() {
+		if(curGameState==GameStates.PauseGame) {
+			curGameState = lastGameState;
+			this.remove(resumeBut);
+			this.remove(restartBut);
+			this.remove(settingsBut);
+			this.remove(menuBut);
+		}
+		else {
+			setLastState();
+			curGameState = GameStates.PauseGame;
+			this.add(resumeBut);
+			this.add(restartBut);
+			this.add(settingsBut);
+			this.add(menuBut);
+		}
+	}
+	private void game() {
+		setLastState();
+		curGameState = GameStates.InGame;
+	}
+	
 	
 	public class ControlAdapter extends KeyAdapter {
 		
@@ -167,21 +259,14 @@ public class GameScene extends Scene {
 	        
 
 	        if (key == KeyEvent.VK_ESCAPE) {
-	        	Debug.Log("\t\tPause Menu");
-	        	
-	        	MovBlokApp.GetWindow().SetCurrentState(MovBlokScenes.Quit);
-	        	exitScene();
-	        	
+	        	pause();
 	        	return;
 	        }
 	        
 	        if(curGameState!=GameStates.InGame) return; 
 	        
 	        if (key == KeyEvent.VK_R) {
-	        	dataHandler.setDataFile("Movblok/MapData/Input");
-	        	grd = dataHandler.ReadGridData();
-	        	plr = dataHandler.ReadPlayerData();
-	    		grd.addObj(plr);
+
 	    		return;
 	        }
 	        

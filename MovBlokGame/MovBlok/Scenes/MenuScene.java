@@ -41,9 +41,8 @@ public class MenuScene extends Scene implements ActionListener{
 	@Override
 	protected void Start() {
 		loadImages();
-		this.setLayout(null);
 		this.setBackground(Color.black);
-		
+
 		startBut = new JButton("Start Game");
         startBut.setFocusable(false);
 		startBut.setBounds(width-buttonWidth/2, height+30, buttonWidth, buttonHeight);
@@ -89,13 +88,13 @@ public class MenuScene extends Scene implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == startBut) {
-			MovBlokApp.GetWindow().SetCurrentState(MovBlokScenes.Game);
+			MovBlokApp.GetWindow().setCurrentState(MovBlokScenes.Game);
 		}
 		if(e.getSource() == mapEditorBut) {
-			MovBlokApp.GetWindow().SetCurrentState(MovBlokScenes.MapCreate);
+			MovBlokApp.GetWindow().setCurrentState(MovBlokScenes.MapCreate);
 		}
 		if(e.getSource() == quitBut) {
-			MovBlokApp.GetWindow().SetCurrentState(MovBlokScenes.Quit);
+			MovBlokApp.GetWindow().setCurrentState(MovBlokScenes.Quit);
 		}
 		exitScene();
 	}	

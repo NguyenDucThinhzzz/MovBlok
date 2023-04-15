@@ -13,7 +13,7 @@ public class MovBlokApp extends Window {
 	}
 	//Game values
 	private MovBlokScenes currentScene = MovBlokScenes.Menu;
-	public void SetCurrentState(MovBlokScenes _state) {
+	public void setCurrentState(MovBlokScenes _state) {
 		currentScene = _state;
 	}
 	//Game scenes

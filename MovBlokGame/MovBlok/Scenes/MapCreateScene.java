@@ -166,13 +166,13 @@ public class MapCreateScene extends Scene {
 	        if (key == KeyEvent.VK_ESCAPE) {
 	        	Debug.Log("\t\tPause Menu");
 	        	
-	        	MovBlokApp.GetWindow().SetCurrentState(MovBlokScenes.Quit);
+	        	MovBlokApp.GetWindow().setCurrentState(MovBlokScenes.Quit);
 	        	exitScene();
 	        	
 	        	return;
 	        }
 	        
-	        if(curGameState!=GameStates.InGame) return; 
+	        if(curGameState!=MapCreatorState.InGame) return; 
 	        
 	        if(key == KeyEvent.VK_1) {
 	        	selector = new Box();
