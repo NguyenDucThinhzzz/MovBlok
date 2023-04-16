@@ -35,5 +35,4 @@ public abstract class Window extends JFrame{
 	protected abstract void init();
 	protected abstract void gameLoop();
 	protected abstract void quit();
-	
 }

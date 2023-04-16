@@ -12,15 +12,6 @@ public abstract class Scene extends JPanel{
 	protected Scene() {
 		Awake();
 	}
-	protected abstract void Awake();
-    
-	protected abstract void Start();
-	
-	protected abstract void Update();
-	
-	protected abstract void LateUpdate();
-	
-	protected abstract void doDrawing(Graphics g);
 	
 	@Override
 	public void paintComponent(Graphics g) {
@@ -44,6 +35,7 @@ public abstract class Scene extends JPanel{
     	setFocusable(false);
 		setLayout(null);
     	setVisible(true);
+    	loadAssets();
     }
     
     private void sceneLoop() {
@@ -56,6 +48,17 @@ public abstract class Scene extends JPanel{
     		repaint();
     	}
     }
+	protected abstract void loadAssets();
+    
+    protected abstract void Awake();
+    
+    protected abstract void Start();
+    
+    protected abstract void Update();
+    
+    protected abstract void LateUpdate();
+    
+    protected abstract void doDrawing(Graphics g);
 	
     
 }

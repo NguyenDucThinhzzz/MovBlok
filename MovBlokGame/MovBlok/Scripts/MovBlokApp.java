@@ -1,6 +1,9 @@
 package MovBlok.Scripts;
 
 import java.awt.BorderLayout;
+
+import javax.swing.ImageIcon;
+
 import MovBlok.Scenes.*;
 import UnifyEngine.Window;
 import UnifyEngine.Debug;
@@ -12,8 +15,8 @@ public class MovBlokApp extends Window {
 		return window;
 	}
 	//Game values
-	private MovBlokScenes currentScene = MovBlokScenes.Menu;
-	public void setCurrentState(MovBlokScenes _state) {
+	private EMovBlokScenes currentScene = EMovBlokScenes.Menu;
+	public void setCurrentState(EMovBlokScenes _state) {
 		currentScene = _state;
 	}
 	//Game scenes
@@ -35,7 +38,7 @@ public class MovBlokApp extends Window {
 	
 	@Override
 	protected void init() {
-		setIconImage(engine_icon);
+		setIconImage((new ImageIcon("MovBlok/resources/box_low_res.png")).getImage());
 		setLayout(new BorderLayout());
 	}
 	

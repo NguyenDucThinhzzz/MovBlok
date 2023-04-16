@@ -1,7 +1,8 @@
 package MovBlok.Scripts;
 
-public enum GameStates {
+public enum EGameStates {
 	Loading,
+	Creation,
 	InGame,
 	PauseGame,
 	WinGame,

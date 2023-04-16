@@ -22,22 +22,24 @@ import UnifyEngine.Vector2;
 import MovBlok.Objects.*;
 import MovBlok.Objects.Box;
 import MovBlok.Scripts.DataHandler;
-import MovBlok.Scripts.GameStates;
+import MovBlok.Scripts.EGameStates;
 import MovBlok.Scripts.MovBlokApp;
-import MovBlok.Scripts.MovBlokScenes;
+import MovBlok.Scripts.EMovBlokScenes;
+import MovBlok.Scripts.LoadingBar;
 
 public class GameScene extends Scene implements ActionListener{
+	//Game settings
 	private int width;
 	private int height;
-	private Grid grd;
-	private Player plr;
-	private GameStates curGameState = GameStates.Loading;
-	private GameStates lastGameState = curGameState;
-	private BufferedImage winBackground;
-	private DataHandler dataHandler;
-	
 	private int renderDist;
 	private int boxSize;
+	//Game data
+	private DataHandler dataHandler;
+	private EGameStates curGameState = EGameStates.Loading;
+	private EGameStates lastGameState = curGameState;
+	private Grid grd;
+	private Player plr;
+	private BufferedImage winBackground;
 	
 	//Pause Screen Variables
 	private JButton resumeBut;
@@ -45,8 +47,46 @@ public class GameScene extends Scene implements ActionListener{
 	private JButton settingsBut;
 	private JButton menuBut;
 	
+	private LoadingBar loadBar = new LoadingBar(this);
+	
 	public GameScene() {
 		super();
+	}
+	
+
+	@Override
+	protected void loadAssets() {
+		//Buttons
+		int buttonWidth= 150;
+		int buttonHeight= 30;
+		
+		resumeBut = new JButton("Resume Game");
+		resumeBut.setFocusable(false);
+		resumeBut.setBounds(width-buttonWidth/2, height+30, buttonWidth, buttonHeight);
+		resumeBut.addActionListener(this);
+		
+		restartBut = new JButton("Restart Level");
+		restartBut.setFocusable(false);
+		restartBut.setBounds(width-buttonWidth/2, height+90, buttonWidth, buttonHeight);
+		restartBut.addActionListener(this);
+		
+		settingsBut = new JButton("Settings");
+		settingsBut.setFocusable(false);
+		settingsBut.setBounds(width-buttonWidth/2, height+150, buttonWidth, buttonHeight);
+		settingsBut.addActionListener(this);
+		
+		menuBut = new JButton("Return to Menu");
+		menuBut.setFocusable(false);
+		menuBut.setBounds(width-buttonWidth/2, height+210, buttonWidth, buttonHeight);
+		menuBut.addActionListener(this);
+		
+		//Images
+		try {
+			winBackground = ImageIO.read(new File("MovBlok/resources/vanheo.jpg"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -57,23 +97,18 @@ public class GameScene extends Scene implements ActionListener{
 
 		dataHandler = new DataHandler();
 		dataHandler.setDataFile("Movblok/MapData/Input");
-		try {
-			winBackground = ImageIO.read(new File("MovBlok/resources/vanheo.jpg"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		loadButtons();
 	}
 
 	@Override
 	protected void Start() {
 		//Read map data
+		loadBar.addProgress(0.1f);
 		dataHandler.openFileRead();
 		grd = dataHandler.ReadGridData();
 		plr = dataHandler.ReadPlayerData();
 		dataHandler.closeFile();
 		grd.addObj(plr);
+		loadBar.addProgress(0.1f);
 
 		//Aspect ratio change in the future for now it's 1280x720 (16:9)
 		boxSize=80;
@@ -86,7 +121,8 @@ public class GameScene extends Scene implements ActionListener{
 				}
 			}
 		}
-
+		loadBar.addProgress(0.5f);
+		
 //		//Testing
 //		grd.addObj(new Box(3,1));
 //		for(int i=0;i<grd.getBoundX();i++) {
@@ -102,17 +138,16 @@ public class GameScene extends Scene implements ActionListener{
 //			grd.addObj(new Wall(i,2));
 //		}
 //		grd.addObj(new Portal(6,6));
-		dataHandler.setDataFile("MovBlok/MapData/Test");
-		dataHandler.openFileWrite();
-		dataHandler.WriteFileData(grd,plr);
-		dataHandler.closeFile();
+		loadBar.addProgress(1);
+		loadBar.addProgress(1);
 		game();
+		
 	}
 	
 	@Override
 	protected void Update() {
-	}
 
+	}
 	@Override
 	protected void LateUpdate() {
 		
@@ -122,6 +157,10 @@ public class GameScene extends Scene implements ActionListener{
 	protected void doDrawing(Graphics g) {
 		switch(curGameState) {
 		case Loading:
+			g.setColor(Color.gray);
+			g.setFont(new Font("TimesRoman",Font.BOLD,100));
+			g.drawString("LOADING", width/2+220, 300);
+			loadBar.draw(g, width-250, height+10, 500, 20);
 			break;
 		case InGame:
 			drawGrid(g);
@@ -130,10 +169,12 @@ public class GameScene extends Scene implements ActionListener{
 			g.drawImage(winBackground, 0,0, width*2,height*2, this);
 			g.setColor(Color.green);
 			g.setFont(new Font("TimesRoman",Font.BOLD,100));
-			g.drawString("Victory!!!", width/2+100, height);
+			g.drawString("Victory!!!", width/2+175, height);
 			break;
 		case PauseGame:
-			g.drawString("PAUSE", width, 100);
+			g.setColor(Color.gray);
+			g.setFont(new Font("TimesRoman",Font.BOLD,100));
+			g.drawString("PAUSE", width/2+220, 300);
 			break;
 		}
 
@@ -167,31 +208,7 @@ public class GameScene extends Scene implements ActionListener{
 			
 		}
 	}
-	
-	private void loadButtons() {
-		int buttonWidth= 150;
-		int buttonHeight= 30;
-		
-		resumeBut = new JButton("Resume Game");
-		resumeBut.setFocusable(false);
-		resumeBut.setBounds(width-buttonWidth/2, height+30, buttonWidth, buttonHeight);
-		resumeBut.addActionListener(this);
-		
-		restartBut = new JButton("Restart Level");
-		restartBut.setFocusable(false);
-		restartBut.setBounds(width-buttonWidth/2, height+90, buttonWidth, buttonHeight);
-		restartBut.addActionListener(this);
-		
-		settingsBut = new JButton("Settings");
-		settingsBut.setFocusable(false);
-		settingsBut.setBounds(width-buttonWidth/2, height+150, buttonWidth, buttonHeight);
-		settingsBut.addActionListener(this);
-		
-		menuBut = new JButton("Return to Menu");
-		menuBut.setFocusable(false);
-		menuBut.setBounds(width-buttonWidth/2, height+210, buttonWidth, buttonHeight);
-		menuBut.addActionListener(this);
-	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -205,13 +222,14 @@ public class GameScene extends Scene implements ActionListener{
         	plr = dataHandler.ReadPlayerData();
     		grd.addObj(plr);
     		dataHandler.closeFile();
+        	lastGameState = EGameStates.InGame;
     		pause();
 		}
 		if(e.getSource() == settingsBut) {
 			
 		}
 		if(e.getSource() == menuBut) {
-        	MovBlokApp.GetWindow().setCurrentState(MovBlokScenes.Menu);
+        	MovBlokApp.GetWindow().setCurrentState(EMovBlokScenes.Menu);
         	exitScene();
 		}
 	}
@@ -221,14 +239,14 @@ public class GameScene extends Scene implements ActionListener{
 	}
 	
 	private void load() {
-		curGameState = GameStates.Loading;
+		curGameState = EGameStates.Loading;
 	}
 	private void win() {
 		setLastState();
-		curGameState = GameStates.WinGame;
+		curGameState = EGameStates.WinGame;
 	}
 	private void pause() {
-		if(curGameState==GameStates.PauseGame) {
+		if(curGameState==EGameStates.PauseGame) {
 			curGameState = lastGameState;
 			this.remove(resumeBut);
 			this.remove(restartBut);
@@ -237,7 +255,7 @@ public class GameScene extends Scene implements ActionListener{
 		}
 		else {
 			setLastState();
-			curGameState = GameStates.PauseGame;
+			curGameState = EGameStates.PauseGame;
 			this.add(resumeBut);
 			this.add(restartBut);
 			this.add(settingsBut);
@@ -246,7 +264,7 @@ public class GameScene extends Scene implements ActionListener{
 	}
 	private void game() {
 		setLastState();
-		curGameState = GameStates.InGame;
+		curGameState = EGameStates.InGame;
 	}
 	
 	
@@ -257,13 +275,14 @@ public class GameScene extends Scene implements ActionListener{
 
 	        int key = e.getKeyCode();
 	        
+	        if(curGameState==EGameStates.Loading) return; 
 
 	        if (key == KeyEvent.VK_ESCAPE) {
 	        	pause();
 	        	return;
 	        }
 	        
-	        if(curGameState!=GameStates.InGame) return; 
+	        if(curGameState!=EGameStates.InGame) return; 
 	        
 	        if (key == KeyEvent.VK_R) {
 

@@ -1,6 +1,6 @@
 package MovBlok.Scripts;
 
-public enum MovBlokScenes {
+public enum EMovBlokScenes {
 	Menu,
 	Game,
 	MapCreate,

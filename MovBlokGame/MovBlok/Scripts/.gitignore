@@ -13,3 +13,8 @@
 /MovBlokScenes.class
 /DataHandler.class
 /MapCreatorState.class
+/MapCreatorStates.class
+/EGameStates.class
+/EMapCreatorStates.class
+/EMovBlokScenes.class
+/LoadingBar.class

@@ -13,15 +13,14 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import MovBlok.Scripts.MovBlokApp;
-import MovBlok.Scripts.MovBlokScenes;
+import MovBlok.Scripts.EMovBlokScenes;
 import UnifyEngine.Debug;
 import UnifyEngine.Scene;
 
 public class MenuScene extends Scene implements ActionListener{
 	protected int width = MovBlokApp.GetWindow().getWidth()/2;
 	protected int height = MovBlokApp.GetWindow().getHeight()/2;
-	private int buttonWidth = 100;
-	private int buttonHeight = 40;
+
 	private Font mainFont = (new Font("TimesRoman",Font.BOLD,100));
 	private BufferedImage background;
 	
@@ -32,17 +31,14 @@ public class MenuScene extends Scene implements ActionListener{
 	public MenuScene() {
 		super();
 	}
+	
 	@Override
-	protected void Awake() {
+	protected void loadAssets() {
 		// TODO Auto-generated method stub
+		//Buttons
+		int buttonWidth = 100;
+		int buttonHeight = 40;
 		
-	}
-
-	@Override
-	protected void Start() {
-		loadImages();
-		this.setBackground(Color.black);
-
 		startBut = new JButton("Start Game");
         startBut.setFocusable(false);
 		startBut.setBounds(width-buttonWidth/2, height+30, buttonWidth, buttonHeight);
@@ -58,6 +54,23 @@ public class MenuScene extends Scene implements ActionListener{
 		quitBut.setBounds(width-buttonWidth/2, height+150, buttonWidth, buttonHeight);
 		quitBut.addActionListener(this);
 		
+		//Images
+		try {
+			background = ImageIO.read(new File("MovBlok/resources/yasuo.jpg"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Override
+	protected void Awake() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void Start() {
+		this.setBackground(Color.black);
 		this.add(startBut);
 		this.add(mapEditorBut);
 		this.add(quitBut);
@@ -82,29 +95,24 @@ public class MenuScene extends Scene implements ActionListener{
 		g.drawImage(background, 0,0, width*2,height*2, this);
 		g.setColor(Color.RED);
 		g.setFont(mainFont);
-		g.drawString("MovBlok", width/2+110, height-100);
+		g.drawString("MovBlok", width/2+175, height-100);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == startBut) {
-			MovBlokApp.GetWindow().setCurrentState(MovBlokScenes.Game);
+			MovBlokApp.GetWindow().setCurrentState(EMovBlokScenes.Game);
 		}
 		if(e.getSource() == mapEditorBut) {
-			MovBlokApp.GetWindow().setCurrentState(MovBlokScenes.MapCreate);
+			MovBlokApp.GetWindow().setCurrentState(EMovBlokScenes.MapCreate);
 		}
 		if(e.getSource() == quitBut) {
-			MovBlokApp.GetWindow().setCurrentState(MovBlokScenes.Quit);
+			MovBlokApp.GetWindow().setCurrentState(EMovBlokScenes.Quit);
 		}
 		exitScene();
 	}	
 	
-	private void loadImages() {
-		try {
-			background = ImageIO.read(new File("MovBlok/resources/yasuo.jpg"));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	private void loadImages(){
+
 	}
 }
