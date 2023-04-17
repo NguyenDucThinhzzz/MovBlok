@@ -25,6 +25,9 @@ public class Grid {
 		if(_obj.getPos().x<0 || _obj.getPos().y<0 || _obj.getPos().x>=bound_x || _obj.getPos().y>=bound_y) return;
 		 arr[_obj.getPos().y][_obj.getPos().x] = _obj;
 	}
+	public void setNull(int _x, int _y) {
+		arr[_y][_x] = null;
+	}
 	
 	public void switchObj(Vector2 _pos1,Vector2 _pos2) {
 		if(_pos1.x<0 || _pos1.y<0 || _pos1.x>=bound_x || _pos1.y>=bound_y || _pos2.x<0 || _pos2.y<0 || _pos2.x>=bound_x || _pos2.y>=bound_y) return;

@@ -8,25 +8,19 @@ import UnifyEngine.Scene;
 
 public class LoadingBar {
 	private Scene scene;
-	private float progress;
+	private double progress;
 	
 	public LoadingBar(Scene _scene) {
 		scene = _scene;
 		progress = 0;
 	}
-	public float getProgress(){
+	public double getProgress(){
 		return progress;
 	}
 	public void reset(){
 		progress = 0;
 	}
-	public void addProgress(float _amount) {
-//		try {
-//			TimeUnit.MILLISECONDS.sleep(200);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+	public void addProgress(double _amount) {
 		if(progress+_amount>1f) {
 			progress = 1f;
 		}

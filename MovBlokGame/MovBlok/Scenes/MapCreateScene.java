@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -35,22 +36,25 @@ public class MapCreateScene extends Scene implements ActionListener{
 	private int boxSize;
 	//Game data
 	private DataHandler dataHandler;
-	private EGameStates curGameState = EGameStates.InGame;
+	private EGameStates curGameState = EGameStates.Creation;
 	private EGameStates lastGameState = curGameState;
 	private Grid grd;
-	private Player plr;
+	private Player editor;
+	private Player plrSpawn;
 	private GameObject selector = new Box();
 	
 	//Pause Screen Variables
 	private JButton resumeBut;
-	private JButton restartBut;
-	private JButton settingsBut;
+	private JButton saveMapBut;
+	private JButton newMapBut;
 	private JButton menuBut;
+	private JTextField fileNameField;
+	
 	//Creation Screen Variables
 	private JTextField gridX;
 	private JTextField gridY;
-	
 	private JButton submitBut;
+	private boolean finishInput = false;
 	
 	private LoadingBar loadBar = new LoadingBar(this);
 	
@@ -65,20 +69,20 @@ public class MapCreateScene extends Scene implements ActionListener{
 		int buttonWidth= 150;
 		int buttonHeight= 30;
 		
-		resumeBut = new JButton("Resume Game");
+		resumeBut = new JButton("Resume");
 		resumeBut.setFocusable(false);
 		resumeBut.setBounds(width-buttonWidth/2, height+30, buttonWidth, buttonHeight);
 		resumeBut.addActionListener(this);
 		
-		restartBut = new JButton("Restart Level");
-		restartBut.setFocusable(false);
-		restartBut.setBounds(width-buttonWidth/2, height+90, buttonWidth, buttonHeight);
-		restartBut.addActionListener(this);
+		saveMapBut = new JButton("Save Map As");
+		saveMapBut.setFocusable(false);
+		saveMapBut.setBounds(width-buttonWidth/2, height+90, buttonWidth, buttonHeight);
+		saveMapBut.addActionListener(this);
 		
-		settingsBut = new JButton("Settings");
-		settingsBut.setFocusable(false);
-		settingsBut.setBounds(width-buttonWidth/2, height+150, buttonWidth, buttonHeight);
-		settingsBut.addActionListener(this);
+		newMapBut = new JButton("Create New Map");
+		newMapBut.setFocusable(false);
+		newMapBut.setBounds(width-buttonWidth/2, height+150, buttonWidth, buttonHeight);
+		newMapBut.addActionListener(this);
 		
 		menuBut = new JButton("Return to Menu");
 		menuBut.setFocusable(false);
@@ -87,15 +91,18 @@ public class MapCreateScene extends Scene implements ActionListener{
 		
 		submitBut = new JButton("Confirm");
 		submitBut.setFocusable(false);
-		submitBut.setBounds(width-buttonWidth/2, height+210, buttonWidth, buttonHeight);
+		submitBut.setBounds(width-buttonWidth/2, height+210, buttonWidth, 40);
 		submitBut.addActionListener(this);
 		
 		//Text Fields
-		gridX = new JTextField("100");
-		gridX.setBounds(width-buttonWidth/2, height+30, buttonWidth, buttonHeight);
+		gridX = new JTextField("Grid X");
+		gridX.setBounds(width-buttonWidth/2, height+30, buttonWidth, 40);
 		
-		gridY = new JTextField("100");
-		gridY.setBounds(width-buttonWidth/2, height+90, buttonWidth, buttonHeight);
+		gridY = new JTextField("Grid Y");
+		gridY.setBounds(width-buttonWidth/2, height+90, buttonWidth, 40);
+		
+		fileNameField = new JTextField("Save File Name");
+		fileNameField.setBounds(width+buttonWidth/2+20, height+90, buttonWidth, buttonHeight);
 	}
 	
 	@Override
@@ -105,27 +112,24 @@ public class MapCreateScene extends Scene implements ActionListener{
 		MovBlokApp.GetWindow().addKeyListener(new ControlAdapter());
 
 		dataHandler = new DataHandler();
-		dataHandler.setDataFile("Movblok/MapData/Input");
 	}
 
 	@Override
 	protected void Start() {
-
-		//Read map data
-		loadBar.addProgress(0.05f);
-		inputMapInfo();
-		loadBar.addProgress(0.05f);
-
-		//Aspect ratio change in the future for now it's 1280x720 (16:9)
 		boxSize=80;
 		renderDist = width/boxSize+1;
-		float d = 1/(grd.getBoundX()*grd.getBoundY());
+
+		//Read map data
+		inputMapInfo();
+		loadBar.addProgress(0.1f);
+
+		//Aspect ratio change in the future for now it's 1280x720 (16:9)
 		for(int i=0;i<grd.getBoundY();i++) {
 			for(int j=0;j<grd.getBoundX();j++) {
 				if(grd.getObj(j,i)==null){
-					grd.addObj(new Ground(j,i));
+					grd.addObj(null);
 				}
-				loadBar.addProgress(0.001f);
+				loadBar.addProgress(1.0f/(grd.getBoundX()*grd.getBoundY()));
 			}
 		}
 		
@@ -145,13 +149,14 @@ public class MapCreateScene extends Scene implements ActionListener{
 //		}
 //		grd.addObj(new Portal(6,6));
 		loadBar.addProgress(0.1f);
-		dataHandler.setDataFile("MovBlok/MapData/Map1");
-		dataHandler.openFileWrite();
-		dataHandler.WriteFileData(grd,plr);
-		dataHandler.closeFile();
+
 		loadBar.addProgress(1);
-		loadBar.addProgress(1);
-		
+		try {
+			TimeUnit.SECONDS.sleep(1);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		game();
 	}
 	
@@ -163,7 +168,7 @@ public class MapCreateScene extends Scene implements ActionListener{
 	protected void LateUpdate() {
 		
 	}
-	
+	//Draw
 	@Override
 	protected void doDrawing(Graphics g) {
 		switch(curGameState) {
@@ -178,6 +183,7 @@ public class MapCreateScene extends Scene implements ActionListener{
 			break;
 		case InGame:
 			drawGrid(g);
+			selector.draw(g, boxSize, height*2-boxSize*2, boxSize, boxSize, this);
 			break;
 		case PauseGame:
 			g.setColor(Color.gray);
@@ -191,10 +197,10 @@ public class MapCreateScene extends Scene implements ActionListener{
 	}
 	public void drawGrid(Graphics g) {
 		try {
-			int top = plr.getPos().y + renderDist;
-			int left = plr.getPos().x - renderDist;
-			int bot = plr.getPos().y - renderDist;
-			int right = plr.getPos().x + renderDist;
+			int top = editor.getPos().y + renderDist;
+			int left = editor.getPos().x - renderDist;
+			int bot = editor.getPos().y - renderDist;
+			int right = editor.getPos().x + renderDist;
 			
 			g.setColor(Color.green);
 			for(int i = bot; i <=top ; i++) {
@@ -224,55 +230,25 @@ public class MapCreateScene extends Scene implements ActionListener{
 		}
 	}
 	private void drawCreationUI(Graphics g) {
-		
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		if(e.getSource() == resumeBut) {
-			pause();
-		}
-		if(e.getSource() == restartBut) {
-        	dataHandler.setDataFile("Movblok/MapData/Input");
-        	dataHandler.openFileRead();
-        	grd = dataHandler.ReadGridData();
-        	plr = dataHandler.ReadPlayerData();
-    		grd.addObj(plr);
-    		dataHandler.closeFile();
-        	lastGameState = EGameStates.InGame;
-    		pause();
-		}
-		if(e.getSource() == settingsBut) {
-			
-		}
-		if(e.getSource() == menuBut) {
-        	MovBlokApp.GetWindow().setCurrentState(EMovBlokScenes.Menu);
-        	exitScene();
-		}
-		if(e.getSource() == submitBut) {
-			int x = Integer.parseInt(gridX.getText());
-			int y = Integer.parseInt(gridY.getText());
-			load();
-			loaded = true;
-			grd = new Grid(x,y);
-			plr = new Player(0,0);
-			loadBar.addProgress(0.01f);
-		}
+		g.setColor(Color.gray);
+		g.setFont(new Font("TimesRoman",Font.BOLD,100));
+		g.drawString("Input Map Info", width/2, 200);
 	}
 	
+	//Functions
 	private void setLastState() {
 		lastGameState = curGameState;
 	}
-	private boolean loaded = false;
+
 	private void inputMapInfo() {
 		setLastState();
 		curGameState = EGameStates.Creation;
+		plrSpawn = new Player(0,0);
 
 		this.add(gridX);
 		this.add(gridY);
 		this.add(submitBut);
-		while(!loaded) {
+		while(!finishInput) {
 			//Do random things
 			setLastState();
 		}
@@ -281,7 +257,7 @@ public class MapCreateScene extends Scene implements ActionListener{
 		this.remove(gridY);
 		this.remove(submitBut);
 		
-		loaded = false;
+		finishInput = false;
 	}
 	
 	private void load() {
@@ -291,25 +267,64 @@ public class MapCreateScene extends Scene implements ActionListener{
 	private void pause() {
 		if(curGameState==EGameStates.PauseGame) {
 			curGameState = lastGameState;
+			MovBlokApp.GetWindow().requestFocus();
 			this.remove(resumeBut);
-			this.remove(restartBut);
-			this.remove(settingsBut);
+			this.remove(saveMapBut);
+			this.remove(newMapBut);
 			this.remove(menuBut);
+			this.remove(fileNameField);
 		}
 		else {
 			setLastState();
 			curGameState = EGameStates.PauseGame;
 			this.add(resumeBut);
-			this.add(restartBut);
-			this.add(settingsBut);
+			this.add(saveMapBut);
+			this.add(newMapBut);
 			this.add(menuBut);
+			this.add(fileNameField);
 		}
 	}
 	private void game() {
 		setLastState();
 		curGameState = EGameStates.InGame;
 	}
-	
+	//Buttons On Click
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource() == resumeBut) {
+			pause();
+		}
+		if(e.getSource() == saveMapBut) {
+    		dataHandler.setDataFile("MovBlok/MapData/"+fileNameField.getText());
+    		dataHandler.openFileWrite();
+    		dataHandler.WriteFileData(grd,plrSpawn);
+    		dataHandler.closeFile();
+        	lastGameState = EGameStates.InGame;
+    		pause();
+		}
+		if(e.getSource() == newMapBut) {
+			
+		}
+		if(e.getSource() == menuBut) {
+        	MovBlokApp.GetWindow().setCurrentState(EMovBlokScenes.Menu);
+        	exitScene();
+		}
+		if(e.getSource() == submitBut) {
+			try {
+				int x = Integer.parseInt(gridX.getText());
+				int y = Integer.parseInt(gridY.getText());
+				load();
+				grd = new Grid(x,y);
+				editor = new Player(0,0);
+				loadBar.addProgress(0.01f);
+				finishInput = true;
+			}
+			catch(NumberFormatException ex) {
+				Debug.LogError("You can only pass in Integer value!");
+			}
+		}
+	}
 	
 	public class ControlAdapter extends KeyAdapter {
 		
@@ -347,40 +362,49 @@ public class MapCreateScene extends Scene implements ActionListener{
 	        	selector = new Wall();
 	        	return;
 	        }
+	        if(key == KeyEvent.VK_6) {
+	        	selector = null;
+	        	return;
+	        }
 	        if(key == KeyEvent.VK_SPACE) {
+	        	if(selector == null)
+	        		grd.setNull(editor.getPos().x, editor.getPos().y);
 	        	if(selector instanceof Box)
-	        		grd.addObj(new Box(plr.getPos().x,plr.getPos().y));
+	        		grd.addObj(new Box(editor.getPos().x,editor.getPos().y));
 	        	if(selector instanceof Ground)
-	        		grd.addObj(new Ground(plr.getPos().x,plr.getPos().y));
-	        	if(selector instanceof Player)
-	        		grd.addObj(new Player(plr.getPos().x,plr.getPos().y));
+	        		grd.addObj(new Ground(editor.getPos().x,editor.getPos().y));
+	        	if(selector instanceof Player) {
+	        		grd.addObj(new Ground(plrSpawn.getPos().x,plrSpawn.getPos().y));
+	        		plrSpawn = new Player(editor.getPos());
+	        		grd.addObj(new Player(editor.getPos().x,editor.getPos().y));  		
+	        	}
 	        	if(selector instanceof Portal)
-	        		grd.addObj(new Portal(plr.getPos().x,plr.getPos().y));
+	        		grd.addObj(new Portal(editor.getPos().x,editor.getPos().y));
 	        	if(selector instanceof Wall)
-	        		grd.addObj(new Wall(plr.getPos().x,plr.getPos().y));
+	        		grd.addObj(new Wall(editor.getPos().x,editor.getPos().y));
 	        	return;
 	        }
 	        
-	        if ((key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT) && plr.getPos().x>0) {
-				plr.getPos().x--;
+	        if ((key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT) && editor.getPos().x>0) {
+				editor.getPos().x--;
 				
 	        	return;
 	        }
 
-	        if ((key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) && plr.getPos().x<grd.getBoundX()-1) {
-				plr.getPos().x++;
+	        if ((key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) && editor.getPos().x<grd.getBoundX()-1) {
+				editor.getPos().x++;
 				
 	        	return;
 	        }
 
-	        if ((key == KeyEvent.VK_W || key == KeyEvent.VK_UP)&& plr.getPos().y>0) {
-				plr.getPos().y--;
+	        if ((key == KeyEvent.VK_W || key == KeyEvent.VK_UP)&& editor.getPos().y>0) {
+				editor.getPos().y--;
 				
 				return;
 	        }
 
-	        if ((key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN) && plr.getPos().y<grd.getBoundY()-1) {
-				plr.getPos().y++;
+	        if ((key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN) && editor.getPos().y<grd.getBoundY()-1) {
+				editor.getPos().y++;
 				
 	        	return;
 	        }

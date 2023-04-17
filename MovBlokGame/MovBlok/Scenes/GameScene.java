@@ -96,7 +96,7 @@ public class GameScene extends Scene implements ActionListener{
 		MovBlokApp.GetWindow().addKeyListener(new ControlAdapter());
 
 		dataHandler = new DataHandler();
-		dataHandler.setDataFile("Movblok/MapData/Input");
+		dataHandler.setDataFile("Movblok/MapData/Map5");
 	}
 
 	@Override
@@ -113,14 +113,7 @@ public class GameScene extends Scene implements ActionListener{
 		//Aspect ratio change in the future for now it's 1280x720 (16:9)
 		boxSize=80;
 		renderDist = width/boxSize+1;
-		
-		for(int i=0;i<grd.getBoundY();i++) {
-			for(int j=0;j<grd.getBoundX();j++) {
-				if(grd.getObj(j,i)==null){
-					grd.addObj(new Ground(j,i));
-				}
-			}
-		}
+
 		loadBar.addProgress(0.5f);
 		
 //		//Testing
@@ -216,7 +209,7 @@ public class GameScene extends Scene implements ActionListener{
 			pause();
 		}
 		if(e.getSource() == restartBut) {
-        	dataHandler.setDataFile("Movblok/MapData/Input");
+        	dataHandler.setDataFile("Movblok/MapData/Map5");
         	dataHandler.openFileRead();
         	grd = dataHandler.ReadGridData();
         	plr = dataHandler.ReadPlayerData();
