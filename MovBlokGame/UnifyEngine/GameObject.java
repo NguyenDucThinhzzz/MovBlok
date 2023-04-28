@@ -15,7 +15,7 @@ public abstract class GameObject{
 	
 	public GameObject() {
 	}
-	public GameObject(int _x, int _y,int _ID){
+	public GameObject(float _x, float _y,int _ID){
 		this.position = new Vector2(_x,_y);
 		try {
 			this.img = ImageIO.read(new File("UnifyEngine/resources/None_Tile.png"));
@@ -26,7 +26,7 @@ public abstract class GameObject{
 		this.ID = _ID;
 	}
 	
-	public GameObject(int _x, int _y, int _ID, String _dir){
+	public GameObject(float _x, float _y, int _ID, String _dir){
 		this.position = new Vector2(_x,_y);
 		try {
 			this.img = ImageIO.read(new File(_dir));
@@ -37,16 +37,11 @@ public abstract class GameObject{
 		this.ID = _ID;
 	}
 	
-	public void draw(Graphics g, ImageObserver Osv) {
-		
-	}
 	public void draw(Graphics g, int _x, int _y, int _width, int _height, ImageObserver Osv) {
 		// TODO Auto-generated method stub
 		g.drawImage(img, _x, _y, _width, _height, Osv);
 	}
 
-	public abstract void update();
-	
 	public int getID() {
 		return ID;
 	}
@@ -62,4 +57,7 @@ public abstract class GameObject{
 	public void setImg(BufferedImage _img) {
 		this.img = _img;
 	}
+	
+	public abstract void update();
+	
 }

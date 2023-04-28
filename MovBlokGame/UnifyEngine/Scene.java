@@ -5,8 +5,6 @@ import java.awt.Graphics;
 import javax.swing.*;
 
 public abstract class Scene extends JPanel{
-	
-	
 	private boolean exit = false;
 
 	protected Scene() {
@@ -44,8 +42,8 @@ public abstract class Scene extends JPanel{
     	repaint();
     	while(!exit) {
     		Update();
-    		LateUpdate();
     		repaint();
+    		LateUpdate();
     	}
     }
 	protected abstract void loadAssets();

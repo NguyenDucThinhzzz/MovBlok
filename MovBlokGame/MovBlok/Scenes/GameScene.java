@@ -174,10 +174,10 @@ public class GameScene extends Scene implements ActionListener{
 	}
 	public void drawGrid(Graphics g) {
 		try {
-			int top = plr.getPos().y + renderDist;
-			int left = plr.getPos().x - renderDist;
-			int bot = plr.getPos().y - renderDist;
-			int right = plr.getPos().x + renderDist;
+			int top = (int)plr.getPos().y + renderDist;
+			int left = (int)plr.getPos().x - renderDist;
+			int bot = (int)plr.getPos().y - renderDist;
+			int right = (int)plr.getPos().x + renderDist;
 			
 			g.setColor(Color.green);
 			for(int i = bot; i <=top ; i++) {
@@ -283,19 +283,19 @@ public class GameScene extends Scene implements ActionListener{
 	        }
 	        
 	        if ((key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT) && plr.getPos().x>0) {
-	        	GameObject temp = grd.getObj(plr.getPos().x-1,plr.getPos().y);
+	        	GameObject temp = grd.getObj((int)plr.getPos().x-1,(int)plr.getPos().y);
 	        	if( temp == null) return;
 				if( temp instanceof Wall) {
 					return;
 				}
 				if( temp instanceof Ground) {
-					grd.switchObj(new Vector2(plr.getPos().x-1,plr.getPos().y), plr.getPos());
+					grd.switchObj(new Vector2((int)plr.getPos().x-1,(int)plr.getPos().y), plr.getPos());
 					plr.getPos().x--;
 					return;
 				}
 
 				if( temp instanceof Box) {
-					GameObject nextObj = grd.getObj(plr.getPos().x-2,plr.getPos().y);
+					GameObject nextObj = grd.getObj((int)plr.getPos().x-2,(int)plr.getPos().y);
 					if(nextObj==null) return;
 					if(nextObj instanceof Ground) {
 						grd.switchObj(new Vector2(plr.getPos().x-2,plr.getPos().y), new Vector2(plr.getPos().x-1,plr.getPos().y));
@@ -312,7 +312,7 @@ public class GameScene extends Scene implements ActionListener{
 	        }
 
 	        if ((key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) && plr.getPos().x<grd.getBoundX()-1) {
-	        	GameObject temp = grd.getObj(plr.getPos().x+1,plr.getPos().y);
+	        	GameObject temp = grd.getObj((int)plr.getPos().x+1,(int)plr.getPos().y);
 	        	if( temp == null) return;
 				if( temp instanceof Wall) {
 					return;
@@ -324,7 +324,7 @@ public class GameScene extends Scene implements ActionListener{
 				}
 
 				if( temp instanceof Box) {
-					GameObject nextObj = grd.getObj(plr.getPos().x+2,plr.getPos().y);
+					GameObject nextObj = grd.getObj((int)plr.getPos().x+2,(int)plr.getPos().y);
 					if(nextObj==null) return;
 					if(nextObj instanceof Ground) {
 						grd.switchObj(new Vector2(plr.getPos().x+2,plr.getPos().y), new Vector2(plr.getPos().x+1,plr.getPos().y));
@@ -341,7 +341,7 @@ public class GameScene extends Scene implements ActionListener{
 	        }
 
 	        if ((key == KeyEvent.VK_W || key == KeyEvent.VK_UP)&& plr.getPos().y>0) {
-	        	GameObject temp = grd.getObj(plr.getPos().x,plr.getPos().y-1);
+	        	GameObject temp = grd.getObj((int)plr.getPos().x,(int)plr.getPos().y-1);
 	        	if( temp == null) return;
 				if( temp instanceof Wall) {
 					return;
@@ -353,7 +353,7 @@ public class GameScene extends Scene implements ActionListener{
 				}
 
 				if( temp instanceof Box) {
-					GameObject nextObj = grd.getObj(plr.getPos().x,plr.getPos().y-2);
+					GameObject nextObj = grd.getObj((int)plr.getPos().x,(int)plr.getPos().y-2);
 					if(nextObj==null) return;
 					if(nextObj instanceof Ground) {
 						grd.switchObj(new Vector2(plr.getPos().x,plr.getPos().y-2), new Vector2(plr.getPos().x,plr.getPos().y-1));
@@ -370,7 +370,7 @@ public class GameScene extends Scene implements ActionListener{
 	        }
 
 	        if ((key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN) && plr.getPos().y<grd.getBoundY()-1) {
-	        	GameObject temp = grd.getObj(plr.getPos().x,plr.getPos().y+1);
+	        	GameObject temp = grd.getObj((int)plr.getPos().x,(int)plr.getPos().y+1);
 	        	if( temp == null) return;
 				if( temp instanceof Wall) {
 					return;
@@ -382,7 +382,7 @@ public class GameScene extends Scene implements ActionListener{
 				}
 
 				if( temp instanceof Box) {
-					GameObject nextObj = grd.getObj(plr.getPos().x,plr.getPos().y+2);
+					GameObject nextObj = grd.getObj((int)plr.getPos().x,(int)plr.getPos().y+2);
 					if(nextObj==null) return;
 					if(nextObj instanceof Ground) {
 						grd.switchObj(new Vector2(plr.getPos().x,plr.getPos().y+2), new Vector2(plr.getPos().x,plr.getPos().y+1));

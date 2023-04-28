@@ -197,10 +197,10 @@ public class MapCreateScene extends Scene implements ActionListener{
 	}
 	public void drawGrid(Graphics g) {
 		try {
-			int top = editor.getPos().y + renderDist;
-			int left = editor.getPos().x - renderDist;
-			int bot = editor.getPos().y - renderDist;
-			int right = editor.getPos().x + renderDist;
+			int top = (int)editor.getPos().y + renderDist;
+			int left = (int)editor.getPos().x - renderDist;
+			int bot = (int)editor.getPos().y - renderDist;
+			int right = (int)editor.getPos().x + renderDist;
 			
 			g.setColor(Color.green);
 			for(int i = bot; i <=top ; i++) {
@@ -368,20 +368,20 @@ public class MapCreateScene extends Scene implements ActionListener{
 	        }
 	        if(key == KeyEvent.VK_SPACE) {
 	        	if(selector == null)
-	        		grd.setNull(editor.getPos().x, editor.getPos().y);
+	        		grd.setNull((int)editor.getPos().x,(int)editor.getPos().y);
 	        	if(selector instanceof Box)
-	        		grd.addObj(new Box(editor.getPos().x,editor.getPos().y));
+	        		grd.addObj(new Box((int)editor.getPos().x,(int)editor.getPos().y));
 	        	if(selector instanceof Ground)
-	        		grd.addObj(new Ground(editor.getPos().x,editor.getPos().y));
+	        		grd.addObj(new Ground((int)editor.getPos().x,(int)editor.getPos().y));
 	        	if(selector instanceof Player) {
-	        		grd.addObj(new Ground(plrSpawn.getPos().x,plrSpawn.getPos().y));
+	        		grd.addObj(new Ground((int)plrSpawn.getPos().x,(int)plrSpawn.getPos().y));
 	        		plrSpawn = new Player(editor.getPos());
-	        		grd.addObj(new Player(editor.getPos().x,editor.getPos().y));  		
+	        		grd.addObj(new Player((int)editor.getPos().x,(int)editor.getPos().y));  		
 	        	}
 	        	if(selector instanceof Portal)
-	        		grd.addObj(new Portal(editor.getPos().x,editor.getPos().y));
+	        		grd.addObj(new Portal((int)editor.getPos().x,(int)editor.getPos().y));
 	        	if(selector instanceof Wall)
-	        		grd.addObj(new Wall(editor.getPos().x,editor.getPos().y));
+	        		grd.addObj(new Wall((int)editor.getPos().x,(int)editor.getPos().y));
 	        	return;
 	        }
 	        
