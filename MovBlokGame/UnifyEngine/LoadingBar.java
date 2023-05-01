@@ -1,10 +1,8 @@
-package MovBlok.Scripts;
+package UnifyEngine;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.concurrent.TimeUnit;
-
-import UnifyEngine.Scene;
 
 public class LoadingBar {
 	private Scene scene;

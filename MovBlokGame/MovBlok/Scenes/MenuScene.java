@@ -111,8 +111,4 @@ public class MenuScene extends Scene implements ActionListener{
 		}
 		exitScene();
 	}	
-	
-	private void loadImages(){
-
-	}
 }

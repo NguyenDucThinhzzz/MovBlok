@@ -18,6 +18,7 @@ import UnifyEngine.Scene;
 import UnifyEngine.Debug;
 import UnifyEngine.GameObject;
 import UnifyEngine.Grid;
+import UnifyEngine.LoadingBar;
 import UnifyEngine.Vector2;
 import MovBlok.Objects.*;
 import MovBlok.Objects.Box;
@@ -25,7 +26,6 @@ import MovBlok.Scripts.DataHandler;
 import MovBlok.Scripts.EGameStates;
 import MovBlok.Scripts.MovBlokApp;
 import MovBlok.Scripts.EMovBlokScenes;
-import MovBlok.Scripts.LoadingBar;
 
 public class GameScene extends Scene implements ActionListener{
 	//Game settings
@@ -139,7 +139,7 @@ public class GameScene extends Scene implements ActionListener{
 	
 	@Override
 	protected void Update() {
-
+		
 	}
 	@Override
 	protected void LateUpdate() {
@@ -222,6 +222,7 @@ public class GameScene extends Scene implements ActionListener{
 			
 		}
 		if(e.getSource() == menuBut) {
+			pause();
         	MovBlokApp.GetWindow().setCurrentState(EMovBlokScenes.Menu);
         	exitScene();
 		}
@@ -277,10 +278,6 @@ public class GameScene extends Scene implements ActionListener{
 	        
 	        if(curGameState!=EGameStates.InGame) return; 
 	        
-	        if (key == KeyEvent.VK_R) {
-
-	    		return;
-	        }
 	        
 	        if ((key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT) && plr.getPos().x>0) {
 	        	GameObject temp = grd.getObj((int)plr.getPos().x-1,(int)plr.getPos().y);

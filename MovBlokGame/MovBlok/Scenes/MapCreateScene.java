@@ -19,6 +19,7 @@ import UnifyEngine.Scene;
 import UnifyEngine.Debug;
 import UnifyEngine.GameObject;
 import UnifyEngine.Grid;
+import UnifyEngine.LoadingBar;
 import UnifyEngine.Vector2;
 import MovBlok.Objects.*;
 import MovBlok.Objects.Box;
@@ -26,7 +27,6 @@ import MovBlok.Scripts.DataHandler;
 import MovBlok.Scripts.EGameStates;
 import MovBlok.Scripts.MovBlokApp;
 import MovBlok.Scripts.EMovBlokScenes;
-import MovBlok.Scripts.LoadingBar;
 
 public class MapCreateScene extends Scene implements ActionListener{
 	//Game settings
@@ -243,8 +243,7 @@ public class MapCreateScene extends Scene implements ActionListener{
 	private void inputMapInfo() {
 		setLastState();
 		curGameState = EGameStates.Creation;
-		plrSpawn = new Player(0,0);
-
+		
 		this.add(gridX);
 		this.add(gridY);
 		this.add(submitBut);
@@ -258,6 +257,7 @@ public class MapCreateScene extends Scene implements ActionListener{
 		this.remove(submitBut);
 		
 		finishInput = false;
+		
 	}
 	
 	private void load() {
@@ -307,6 +307,7 @@ public class MapCreateScene extends Scene implements ActionListener{
 			
 		}
 		if(e.getSource() == menuBut) {
+			pause();
         	MovBlokApp.GetWindow().setCurrentState(EMovBlokScenes.Menu);
         	exitScene();
 		}
@@ -374,7 +375,8 @@ public class MapCreateScene extends Scene implements ActionListener{
 	        	if(selector instanceof Ground)
 	        		grd.addObj(new Ground((int)editor.getPos().x,(int)editor.getPos().y));
 	        	if(selector instanceof Player) {
-	        		grd.addObj(new Ground((int)plrSpawn.getPos().x,(int)plrSpawn.getPos().y));
+	        		if(plrSpawn!=null)
+	        			grd.addObj(new Ground((int)plrSpawn.getPos().x,(int)plrSpawn.getPos().y));
 	        		plrSpawn = new Player(editor.getPos());
 	        		grd.addObj(new Player((int)editor.getPos().x,(int)editor.getPos().y));  		
 	        	}

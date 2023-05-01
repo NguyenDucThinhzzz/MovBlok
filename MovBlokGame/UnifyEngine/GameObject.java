@@ -15,6 +15,17 @@ public abstract class GameObject{
 	
 	public GameObject() {
 	}
+	
+	public GameObject(int _ID, String _dir){
+		try {
+			this.img = ImageIO.read(new File(_dir));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		this.ID = _ID;
+	}
+	
 	public GameObject(float _x, float _y,int _ID){
 		this.position = new Vector2(_x,_y);
 		try {
